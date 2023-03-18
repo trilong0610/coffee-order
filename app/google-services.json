@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1087822610282",
+    "firebase_url": "https://coffeeorder-5b8fa-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "coffeeorder-5b8fa",
+    "storage_bucket": "coffeeorder-5b8fa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1087822610282:android:6916f9e45060f90b2aaf13",
+        "android_client_info": {
+          "package_name": "com.example.coffeeorder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1087822610282-5a0nkqbei4ocg0lm4l0s6sbjt33ba0pq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6N_zllxpAWhM_MkxaPbRH96QD4qYPxWg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1087822610282-5a0nkqbei4ocg0lm4l0s6sbjt33ba0pq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -8,7 +8,7 @@ import java.util.Map;
 public class TableModel {
     public String idTable;
     public int quantity;
-    public boolean status;
+    public boolean status; // true = Ban trong. false = Ban dang co khach
     public String idOrder;
 
     public TableModel(String idTable, int quantity, boolean status, String idOrder) {

@@ -7,18 +7,19 @@ public class ProductModel {
     public String idProduct;
     public String nameProduct;
     public String detailProduct;
-    public long priceProduct;
+    public int priceProduct;
     public String idCategory;
-
+    public String imgProduct;
     public ProductModel() {
     }
 
-    public ProductModel(String idProduct, String nameProduct, String detailProduct, long priceProduct, String idCategory) {
+    public ProductModel(String idProduct, String nameProduct, String detailProduct, int priceProduct, String idCategory, String imgProduct) {
         this.idProduct = idProduct;
         this.nameProduct = nameProduct;
         this.detailProduct = detailProduct;
         this.priceProduct = priceProduct;
         this.idCategory = idCategory;
+        this.imgProduct = imgProduct;
     }
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
@@ -27,6 +28,7 @@ public class ProductModel {
         result.put("detailProduct", detailProduct);
         result.put("priceProduct", priceProduct);
         result.put("idCategory", idCategory);
+        result.put("imgProduct", imgProduct);
         return result;
     }
 }

@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         mainContainer = findViewById(R.id.main_container);
         // Chon item dau tien trong menu
         chipNavigationBar.setItemSelected(R.id.mnu_item_home,true);
-        fragmentManager = getSupportFragmentManager();
+        fragmentManager = this.getSupportFragmentManager();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         return this.mDatabase;
     }
 
-    private void addFragment(Fragment fragment, boolean addToBackstack){
+    public void addFragment(Fragment fragment, boolean addToBackstack){
         FragmentTransaction ft_add = fragmentManager.beginTransaction();
         ft_add.replace(R.id.main_container, fragment);
 

@@ -7,9 +7,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coffeeorder.R;
+import com.example.coffeeorder.activity.MainActivity;
+import com.example.coffeeorder.fragment.HomeFragment;
+import com.example.coffeeorder.fragment.ProductFragment;
 import com.example.coffeeorder.model.TableModel;
 
 import java.util.ArrayList;
@@ -36,6 +43,13 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableItemVie
         holder.txtItemTableQuantity.setText(String.valueOf(tableModels.get(position).quantity));
         holder.txtItemTableStatus.setText(String.valueOf(tableModels.get(position).status));
         holder.txtItemTableIdOrder.setText(tableModels.get(position).idOrder);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = new ProductFragment();
+                ((MainActivity) view.getContext()).addFragment(new ProductFragment(), true);
+            }
+        });
     }
 
     @Override

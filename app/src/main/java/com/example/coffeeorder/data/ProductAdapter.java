@@ -1,6 +1,8 @@
 package com.example.coffeeorder.data;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +22,19 @@ import java.util.ArrayList;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductItemViewHolder>{
     private ArrayList<ProductModel> productModels;
     private Context context;
-    public ProductAdapter(ArrayList<ProductModel> productModels, Context c) {
+    @NonNull
+    private OnItemChangeListener onItemCheckListener;
+    public interface OnItemChangeListener {
+        // item: san pham can tuong tac
+        // number: so luong thay doi
+        void onItemAdd(ProductModel item, int number);
+        void onItemDelete(ProductModel item, int number);
+    }
+
+    public ProductAdapter(ArrayList<ProductModel> productModels, Context c, @NonNull OnItemChangeListener onItemCheckListener) {
         this.productModels = productModels;
         this.context = c;
+        this.onItemCheckListener = onItemCheckListener;
     }
     @NonNull
     @Override
@@ -40,6 +52,59 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
         holder.txtItemProductPrice.setText(String.valueOf(productModel.priceProduct));
         Picasso.get().load(productModel.imgProduct).into(holder.imgItemProductImage);
 
+        // event
+
+        // tang so luong sp
+        holder.btn_item_product_plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int quantity = Integer.parseInt(holder.edtItemProductQuantity.getText().toString());
+                holder.edtItemProductQuantity.setText(String.valueOf(quantity + 1));
+            }
+        });
+
+        holder.btn_item_product_minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int quantity = Integer.parseInt(holder.edtItemProductQuantity.getText().toString());
+                if (quantity > 0)
+                    holder.edtItemProductQuantity.setText(String.valueOf(quantity - 1));
+            }
+        });
+
+        // Kiem tra neu so luong sp >0 -> khach hang dat
+        // Them vao danh sach sp can order
+
+        holder.edtItemProductQuantity.addTextChangedListener(new TextWatcher() {
+            int oldQuantity = Integer.parseInt(holder.edtItemProductQuantity.getText().toString());
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String quantity = holder.edtItemProductQuantity.getText().toString();
+                if (quantity.isEmpty()){
+                    return;
+                }
+                int numQuantity = Integer.parseInt(quantity);
+                if (numQuantity > oldQuantity){
+                    onItemCheckListener.onItemAdd(productModel, numQuantity - oldQuantity);
+                    oldQuantity = numQuantity;
+                }
+                else{
+                    onItemCheckListener.onItemDelete(productModel, oldQuantity - numQuantity);
+                    oldQuantity = numQuantity;
+                }
+            }
+        });
+
     }
 
     @Override
@@ -47,7 +112,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
         return productModels.size();
     }
 
-    public class ProductItemViewHolder extends RecyclerView.ViewHolder {
+
+    public static class ProductItemViewHolder extends RecyclerView.ViewHolder {
         public ImageView imgItemProductImage;
         public TextView txtItemProductName;
         public TextView txtItemProductPrice;

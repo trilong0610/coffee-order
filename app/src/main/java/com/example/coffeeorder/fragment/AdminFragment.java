@@ -66,21 +66,7 @@ public class AdminFragment extends Fragment implements View.OnClickListener {
             mDatabase.updateChildren(childUpdates);
         }
         if (view == btnAddOrder){
-            // push de tao 1 note moi voi id ngau nhien
-            // getKey de lay id cua note vua tao
-            String key = mDatabase.child("Order").push().getKey();
 
-            long currentTime = System.currentTimeMillis()/1000;
-            OrderModel orderModel = new OrderModel(key,currentTime,0,0,"a","detail","table");
-            // toMap de tao ra model dung format de update len firebase
-            Map<String, Object> postValues = orderModel.toMap();
-
-            Map<String, Object> childUpdates = new HashMap<>();
-
-            // update thong tin len note vua tao
-            childUpdates.put("/Order/" +key, postValues);
-
-            mDatabase.updateChildren(childUpdates);
         }
     }
 }

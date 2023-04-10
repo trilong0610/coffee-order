@@ -1,18 +1,23 @@
 package com.example.coffeeorder.activity;
 
+import android.os.Bundle;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.os.Bundle;
-import android.view.View;
 
 import com.example.coffeeorder.R;
 import com.example.coffeeorder.fragment.AdminFragment;
 import com.example.coffeeorder.fragment.AnalysisFragment;
 import com.example.coffeeorder.fragment.HomeFragment;
 import com.example.coffeeorder.fragment.OrderFragment;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
@@ -22,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private View mainContainer;
     private ChipNavigationBar chipNavigationBar;
     private FragmentManager fragmentManager;
+
+    private boolean endData = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +73,33 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             }
+        });
+
+        // thong bao neu co don moi
+        mDatabase.child("Order").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+            }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
         });
     }
 

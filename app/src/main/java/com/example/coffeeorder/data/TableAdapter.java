@@ -1,22 +1,21 @@
 package com.example.coffeeorder.data;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coffeeorder.R;
-import com.example.coffeeorder.activity.MainActivity;
-import com.example.coffeeorder.fragment.HomeFragment;
-import com.example.coffeeorder.fragment.ProductFragment;
+import com.example.coffeeorder.activity.PaymentOrderActivity;
+import com.example.coffeeorder.activity.ProductActivity;
 import com.example.coffeeorder.model.TableModel;
 
 import java.util.ArrayList;
@@ -39,15 +38,33 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableItemVie
 
     @Override
     public void onBindViewHolder(@NonNull TableAdapter.TableItemViewHolder holder, int position) {
+        TableModel tableModel = tableModels.get(position);
         holder.txtItemTableId.setText(tableModels.get(position).idTable);
         holder.txtItemTableQuantity.setText(String.valueOf(tableModels.get(position).quantity));
         holder.txtItemTableStatus.setText(String.valueOf(tableModels.get(position).status));
         holder.txtItemTableIdOrder.setText(tableModels.get(position).idOrder);
+        // Gan mau cho item
+        if (tableModel.status == true) { // san sang
+            holder.layout.setBackground(new ColorDrawable(ContextCompat.getColor(context, R.color.green)));
+        }
+        else {
+            holder.layout.setBackground(new ColorDrawable(ContextCompat.getColor(context, R.color.red)));
+        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment fragment = new ProductFragment();
-                ((MainActivity) view.getContext()).addFragment(new ProductFragment(), true);
+                if (tableModel.status == true) { // san sang
+                    Intent intent = new Intent(context, ProductActivity.class);
+                    intent.putExtra("id_table", tableModel.idTable);
+                    context.startActivity(intent);
+                }
+                else { // dang co khach
+                    // mo activity thanh toan
+                    Intent intent = new Intent(context, PaymentOrderActivity.class);
+                    intent.putExtra("id_order", tableModel.idOrder);
+                    context.startActivity(intent);
+                }
+
             }
         });
     }
@@ -62,6 +79,8 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableItemVie
         public TextView txtItemTableQuantity;
         public TextView txtItemTableStatus;
         public TextView txtItemTableIdOrder;
+
+        public LinearLayout layout;
         public TableItemViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -69,6 +88,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableItemVie
             txtItemTableQuantity = itemView.findViewById(R.id.txt_item_table_quantity);
             txtItemTableStatus = itemView.findViewById(R.id.txt_item_table_status);
             txtItemTableIdOrder = itemView.findViewById(R.id.txt_item_table_idOrder);
+            layout = itemView.findViewById(R.id.layout_item_table);
         }
     }
 }

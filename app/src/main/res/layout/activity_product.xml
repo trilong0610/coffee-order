@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.HomeFragment">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_product_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/txt_product_bill"/>
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_below="@+id/rv_product_main"
+        android:layout_above="@+id/slide_product_order"
+        android:layout_toLeftOf="@+id/txt_product_bill"
+        android:textAlignment="center"
+        android:layout_margin="5sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:text="Tổng tiền:"/>
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/txt_product_bill"
+        android:layout_above="@+id/slide_product_order"
+        android:layout_alignParentRight="true"
+        android:layout_margin="5sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:text="0"/>
+    <com.ncorti.slidetoact.SlideToActView
+        android:id="@+id/slide_product_order"
+        android:layout_margin="10dp"
+        app:area_margin="2dp"
+        app:outer_color="@color/black"
+        app:inner_color="@color/white"
+        app:border_radius="8dp"
+        app:text_size="16sp"
+        app:slider_height="75dp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:text="Đặt đơn..." />
+
+</RelativeLayout>

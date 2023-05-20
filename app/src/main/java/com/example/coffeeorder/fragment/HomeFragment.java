@@ -72,6 +72,7 @@ public class HomeFragment extends Fragment {
 
                 listTable.add(tableModel);
 
+
                 adapter.notifyDataSetChanged();
 
 //                ---------------Cuộn đến item trên cùng khi thêm---------------------------

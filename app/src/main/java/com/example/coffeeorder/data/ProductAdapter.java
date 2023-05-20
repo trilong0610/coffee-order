@@ -76,10 +76,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
         // Them vao danh sach sp can order
 
         holder.edtItemProductQuantity.addTextChangedListener(new TextWatcher() {
-            int oldQuantity = Integer.parseInt(holder.edtItemProductQuantity.getText().toString());
+            int oldQuantity = 0;
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                oldQuantity = Integer.parseInt(holder.edtItemProductQuantity.getText().toString());
             }
 
             @Override
@@ -95,12 +95,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
                 }
                 int numQuantity = Integer.parseInt(quantity);
                 if (numQuantity > oldQuantity){
+                    // tang so luong
                     onItemCheckListener.onItemAdd(productModel, numQuantity - oldQuantity);
-                    oldQuantity = numQuantity;
                 }
                 else{
+                    // giam so luong
                     onItemCheckListener.onItemDelete(productModel, oldQuantity - numQuantity);
-                    oldQuantity = numQuantity;
                 }
             }
         });

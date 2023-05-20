@@ -1,7 +1,6 @@
 package com.example.coffeeorder.activity;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coffeeorder.R;
 import com.example.coffeeorder.data.ProductAdapter;
+import com.example.coffeeorder.model.OrderDetailModel;
 import com.example.coffeeorder.model.OrderModel;
 import com.example.coffeeorder.model.ProductModel;
 import com.google.android.material.textview.MaterialTextView;
@@ -20,8 +20,6 @@ import com.google.firebase.database.DatabaseError;
 import com.ncorti.slidetoact.SlideToActView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ProductActivity extends AppCompatActivity {
     private RecyclerView rv_product_main;
@@ -31,7 +29,7 @@ public class ProductActivity extends AppCompatActivity {
     private MaterialTextView txt_bill;
     private SlideToActView slideToActView;
 
-    private ArrayList<ProductModel> listProductOrder;
+    private ArrayList<OrderDetailModel> listOrderDetail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,22 +53,33 @@ public class ProductActivity extends AppCompatActivity {
 
                 long currentTime = System.currentTimeMillis()/1000;
 
-                OrderModel orderModel = new OrderModel(key,currentTime,0,Long.parseLong(getBill(listProductOrder)),"a","detail","table", listProductOrder);
-                // toMap de tao ra model dung format de update len firebase
-                Map<String, Object> postValues = orderModel.toMap();
+                long total = 0;
+                for (OrderDetailModel orderDetailModel: listOrderDetail) {
+                    total += orderDetailModel.product.priceProduct * orderDetailModel.quantity;
+                }
 
-                Map<String, Object> childUpdates = new HashMap<>();
+                OrderModel orderModel = new OrderModel(key,0,total,"a","detail",id_table, listOrderDetail);
+                // toMap de tao ra model dung format de update len firebase
+//                Map<String, Object> postValues = orderModel.toMap();
+//
+//                Map<String, Object> childUpdates = new HashMap<>();
 
                 // update thong tin len note vua tao
-                childUpdates.put("/Order/" +key, postValues);
+//                childUpdates.put("/Order/" +key, postValues);
+                MainActivity.mDatabase.child("Order").child(key).setValue(orderModel);
 
-                MainActivity.mDatabase.updateChildren(childUpdates);
+
+//                MainActivity.mDatabase.updateChildren(childUpdates);
 
                 // ------------------chinh sua trang thai ban-------------------------
-                Map<String, Object> tableUpdate = new HashMap<>();
-                tableUpdate.put("/"+ id_table + "/idOrder/", key );
-                tableUpdate.put("/"+ id_table + "/status/", false );
-                MainActivity.mDatabase.child("Table").updateChildren(tableUpdate);
+                MainActivity.mDatabase.child("Table").child(id_table).child("status").setValue(false);
+                MainActivity.mDatabase.child("Table").child(id_table).child("idOrder").setValue(key);
+                // Gui data len note thong bao
+                String notifyKey = MainActivity.mDatabase.child("Notify").push().getKey();
+                MainActivity.mDatabase.child("Notify").child(notifyKey).setValue(orderModel);
+                // Xoa data
+                MainActivity.mDatabase.child("Notify").child(notifyKey).removeValue();
+
 
                 // Dong activity
                 finish();
@@ -81,7 +90,7 @@ public class ProductActivity extends AppCompatActivity {
     private void initView(){
         rv_product_main = findViewById(R.id.rv_product_main);
         listProduct = new ArrayList<ProductModel>();
-        listProductOrder = new ArrayList<ProductModel>();
+        listOrderDetail = new ArrayList<OrderDetailModel>();
         slideToActView = findViewById(R.id.slide_product_order);
         txt_bill = findViewById(R.id.txt_product_bill);
         //        Set layout de hien thi thong tin trong recycle view
@@ -97,21 +106,45 @@ public class ProductActivity extends AppCompatActivity {
         adapter = new ProductAdapter(listProduct, this, new ProductAdapter.OnItemChangeListener() {
             @Override
             public void onItemAdd(ProductModel item, int number) {
-                for (int i = 0; i < number; i++) {
-                    listProductOrder.add(item);
+
+                // Tim san pham trong list order
+                boolean flag = false;
+                for (OrderDetailModel orderDetailModel: listOrderDetail) {
+                    if (orderDetailModel.product.idProduct == item.idProduct){
+                        // Tim thay => thay doi sl
+                        orderDetailModel.quantity += number;
+                        flag = true;
+                        break;
+                    }
+                }
+                if (!flag){
+                    // Khong tim thay => them moi
+                    listOrderDetail.add(new OrderDetailModel(item, number));
                 }
 
-                txt_bill.setText(String.format("%,d", Long.parseLong(getBill(listProductOrder))));
-                Log.e("listProductOrder", String.valueOf(listProductOrder));
+                txt_bill.setText(getBill(listOrderDetail));
+
             }
 
             @Override
             public void onItemDelete(ProductModel item, int number) {
-                for (int i = 0; i < number; i++) {
-                    listProductOrder.remove(item);
+                // Tim san pham trong list order
+                // Tim san pham trong list order
+                boolean flag = false;
+                for (OrderDetailModel orderDetailModel: listOrderDetail) {
+                    if (orderDetailModel.product.idProduct == item.idProduct){
+                        // Tim thay => thay doi sl
+                        orderDetailModel.quantity -= number;
+                        flag = true;
+                        break;
+                    }
                 }
-                txt_bill.setText(String.format("%,d", Long.parseLong(getBill(listProductOrder))));
-                Log.e("listProductOrder", String.valueOf(listProductOrder));
+                if (!flag){
+                    // Khong tim thay => them moi
+                    listOrderDetail.add(new OrderDetailModel(item, number));
+                }
+                txt_bill.setText(getBill(listOrderDetail));
+
             }
 
         });
@@ -157,12 +190,11 @@ public class ProductActivity extends AppCompatActivity {
         });
     }
 
-    private String getBill(ArrayList<ProductModel> productModels){
+    private String getBill(ArrayList<OrderDetailModel> orderDetailModels){
         int total = 0;
-        for (ProductModel productModel: productModels) {
-            total += productModel.priceProduct;
+        for (OrderDetailModel orderDetailModel: orderDetailModels) {
+            total += orderDetailModel.product.priceProduct * orderDetailModel.quantity;
         }
-        return String.valueOf(total);
-
+        return String.format("%,d", Long.parseLong(String.valueOf(total)));
     };
 }

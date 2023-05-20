@@ -9,6 +9,7 @@ import java.util.Map;
 public class OrderModel {
     public String idOrder;
     public long timeOrder;
+    public long timeComplete;
     // 0: chưa hoàn thành
     // 1: đã hoàn thành
     // 2: đã thanh toán
@@ -17,17 +18,18 @@ public class OrderModel {
     public String idUser;
     public String detailOrder;
     public String idTable;
-    public ArrayList<ProductModel> productOrders;
+    public ArrayList<OrderDetailModel> orderDetails;
 
-    public OrderModel(String idOrder, long timeOrder, int statusOrder, long totalOrder, String idUser, String detailOrder, String idTable, ArrayList<ProductModel> productOrders) {
+    public OrderModel(String idOrder, int statusOrder, long totalOrder, String idUser, String detailOrder, String idTable, ArrayList<OrderDetailModel> orderDetails) {
         this.idOrder = idOrder;
-        this.timeOrder = timeOrder;
+        this.timeOrder =  System.currentTimeMillis()/1000;
+        this.timeComplete = System.currentTimeMillis()/1000;
         this.statusOrder = statusOrder;
         this.totalOrder = totalOrder;
         this.idUser = idUser;
         this.detailOrder = detailOrder;
         this.idTable = idTable;
-        this.productOrders = productOrders;
+        this.orderDetails = orderDetails;
     }
 
     public OrderModel() {
@@ -43,7 +45,7 @@ public class OrderModel {
         result.put("idUser", idUser);
         result.put("detailOrder", detailOrder);
         result.put("idTable", idTable);
-        result.put("productOrders", productOrders);
+        result.put("orderDetails", orderDetails);
         return result;
     }
 

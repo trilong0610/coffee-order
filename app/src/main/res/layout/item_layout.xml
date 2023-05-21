@@ -20,7 +20,7 @@
         android:textColor="#366ae4"
         android:textSize="16dp"
         android:textStyle="bold"
-
+        android:text="M"
         />
     <TextView
         android:id="@+id/total_order"

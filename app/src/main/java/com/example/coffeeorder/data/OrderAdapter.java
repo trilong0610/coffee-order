@@ -1,5 +1,6 @@
 package com.example.coffeeorder.data;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coffeeorder.R;
+import com.example.coffeeorder.activity.OrderDetail;
 import com.example.coffeeorder.model.OrderModel;
 import com.google.firebase.database.collection.LLRBNode;
 
@@ -62,6 +64,20 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         {
             holder.itemView.setBackgroundColor(Color.GREEN);
         }
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(view.getContext(), OrderDetail.class);
+                    intent.putExtra("id_order", data.getIdOrder());
+                    intent.putExtra("status_order", data.getStatusOrder());
+                    intent.putExtra("total_order", data.getTotalOrder());
+                    intent.putExtra("id_user", data.getIdUser());
+                    intent.putExtra("id_table", data.getIdTable());
+                    intent.putExtra("detail_order", data.getDetailOrder());
+                    view.getContext().startActivity(intent);
+                }
+            }
+            );
     }
 
     @Override

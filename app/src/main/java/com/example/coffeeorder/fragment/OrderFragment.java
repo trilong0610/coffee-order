@@ -7,38 +7,66 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coffeeorder.R;
 import com.example.coffeeorder.activity.MainActivity;
+import com.example.coffeeorder.data.OrderAdapter;
+import com.example.coffeeorder.model.OrderDetailModel;
 import com.example.coffeeorder.model.OrderModel;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 
 public class OrderFragment extends Fragment {
-    private ArrayList<OrderModel> listOrders;
+    //private ArrayList<OrderModel> listOrders;
+    private ArrayList<OrderModel> dataList;
+    ArrayList<OrderDetailModel> orderDetails;
+    private RecyclerView recyclerView;
+    private OrderAdapter mAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_order, container, false);
-        initView(view);
-        loadData();
 
-        initEvent(view);
+        View view=  inflater.inflate(R.layout.fragment_order, container, false);
+        initView(view);
+        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+        mAdapter = new OrderAdapter(dataList);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
+        prepareMovieData();
         return view;
+
     }
 
+    private void prepareMovieData()
+    {
+        loadData();
+        OrderModel orderModel = new OrderModel("1", 1, 20000, "User", "Detail Order", "1", orderDetails);
+        dataList.add(orderModel);
+        orderModel = new OrderModel("2", 2, 20000, "User", "Detail Order", "1", orderDetails);
+        dataList.add(orderModel);
+        mAdapter.notifyDataSetChanged();
+    }
     private void initEvent(View view) {
+        //loadData();
 
     }
 
     private void initView(View view) {
-        listOrders = new ArrayList<OrderModel>();
+        dataList = new ArrayList<OrderModel>();
     }
 
     // load danh sach order tu db
@@ -48,7 +76,8 @@ public class OrderFragment extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 OrderModel orderModel = snapshot.getValue(OrderModel.class);
                 Log.d("TAG", String.valueOf(orderModel.idOrder));
-                listOrders.add(orderModel);
+                dataList.add(orderModel);
+                mAdapter.notifyDataSetChanged();
 
 //                ---------------Cuộn đến item trên cùng khi thêm---------------------------
             }

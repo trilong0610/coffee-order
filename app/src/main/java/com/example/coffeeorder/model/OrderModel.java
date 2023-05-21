@@ -34,7 +34,60 @@ public class OrderModel {
 
     public OrderModel() {
     }
-
+    public String getIdOrder() {
+        return idOrder;
+    }
+    public void setIdOrder(String idOrder) {
+        this.idOrder = idOrder;
+    }
+    public long getTimeOrder() {
+        return timeOrder;
+    }
+    public void setTimeOrder(long timeOrder) {
+        this.timeOrder = timeOrder;
+    }
+    public long getTimeComplete() {
+        return timeComplete;
+    }
+    public void setTimeComplete(long timeComplete) {
+        this.timeComplete = timeComplete;
+    }
+    public int getStatusOrder() {
+        return statusOrder;
+    }
+    public void setStatusOrder(int statusOrder) {
+        this.statusOrder = statusOrder;
+    }
+    public long getTotalOrder() {
+        return totalOrder;
+    }
+    public void setTotalOrder(long totalOrder) {
+        this.totalOrder = totalOrder;
+    }
+    public String getIdUser() {
+        return idUser;
+    }
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
+    }
+    public String getDetailOrder() {
+        return detailOrder;
+    }
+    public void setDetailOrder(String detailOrder) {
+        this.detailOrder = detailOrder;
+    }
+    public String getIdTable() {
+        return idTable;
+    }
+    public void setIdTable(String idTable) {
+        this.idTable = idTable;
+    }
+    public ArrayList<OrderDetailModel> getOrderDetails() {
+        return orderDetails;
+    }
+    public void setOrderDetails(ArrayList<OrderDetailModel> orderDetails) {
+        this.orderDetails = orderDetails;
+    }
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();

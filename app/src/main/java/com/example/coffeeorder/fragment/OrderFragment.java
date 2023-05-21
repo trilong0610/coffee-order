@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -78,14 +77,27 @@ public class OrderFragment extends Fragment {
                 OrderModel orderModel = snapshot.getValue(OrderModel.class);
                 Log.d("TAG", String.valueOf(orderModel.idOrder));
                 dataList.add(orderModel);
-                mAdapter.notifyDataSetChanged();
 
+
+                // cap nhat adapter
+                mAdapter.notifyDataSetChanged();
 //                ---------------Cuộn đến item trên cùng khi thêm---------------------------
+                recyclerView.scrollToPosition(dataList.size() - 1);
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                // Lay thong tin ban thay doi
+                // Lay thong tin don hang thay doi
+                OrderModel orderModel = snapshot.getValue(OrderModel.class);
+                // Tim don hang trong list
+                for (OrderModel item : dataList) {
+                    if (item.idOrder == orderModel.idOrder){
+                        item.statusOrder = orderModel.statusOrder;
+                        mAdapter.notifyDataSetChanged();
+                        recyclerView.scrollToPosition(dataList.size() - 1);
+                        return;
+                    }
+                }
             }
 
             @Override

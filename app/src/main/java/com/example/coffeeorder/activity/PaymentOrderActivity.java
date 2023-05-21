@@ -2,6 +2,7 @@ package com.example.coffeeorder.activity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 public class PaymentOrderActivity extends AppCompatActivity {
     String idOrder = "";
     String idTable = "";
+    String fromActivity = "main";
     OrderModel orderModel; // don hang hien tai cua ban
     ArrayList<OrderDetailModel> listOrderDetails;
 
@@ -40,6 +42,7 @@ public class PaymentOrderActivity extends AppCompatActivity {
         // Nhan idOrder tu intent
         idTable = getIntent().getExtras().getString("id_table");
         idOrder = getIntent().getExtras().getString("id_order");
+        fromActivity = getIntent().getExtras().getString("from_activity");
         Log.e("orders", String.valueOf(idOrder));
 
         initView();
@@ -106,16 +109,28 @@ public class PaymentOrderActivity extends AppCompatActivity {
                 if (orderModel.statusOrder == 0){
                     // Chua pha che
                     // gan thanh truot = hoan thanh
-                    slideComplete.setText("Pha chế hoàn thành");
+                    if (fromActivity.equals("main")){
+                        // Neu truy cap tu acti ban -> khong cho cap nhat pha che
+                        slideComplete.setVisibility(View.INVISIBLE);
+                    }
+                    else {
+                        slideComplete.setText("Pha chế hoàn thành");
+                    }
+
                 }
+
                 if (orderModel.statusOrder == 1){
                     // Da pha che
                     // gan thanh truot = thanh toan
+                    if (fromActivity.equals("order")){
+                        // Neu truy cap tu acti order -> khong cho hoan thanh don
+                        slideComplete.setVisibility(View.INVISIBLE);
+                    }
                     slideComplete.setText("Thanh toán");
                 }
                 if (orderModel.statusOrder == 2){
                     // da thanh toan
-                    slideComplete.setEnabled(false);
+                    slideComplete.setVisibility(View.INVISIBLE);
                 }
             }
         });

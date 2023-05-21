@@ -10,9 +10,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coffeeorder.R;
-import com.example.coffeeorder.activity.OrderDetail;
+import com.example.coffeeorder.activity.PaymentOrderActivity;
 import com.example.coffeeorder.model.OrderModel;
-import com.google.firebase.database.collection.LLRBNode;
 
 import java.util.ArrayList;
 
@@ -67,13 +66,14 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(view.getContext(), OrderDetail.class);
+                    Intent intent = new Intent(view.getContext(), PaymentOrderActivity.class);
                     intent.putExtra("id_order", data.getIdOrder());
                     intent.putExtra("status_order", data.getStatusOrder());
                     intent.putExtra("total_order", data.getTotalOrder());
                     intent.putExtra("id_user", data.getIdUser());
                     intent.putExtra("id_table", data.getIdTable());
                     intent.putExtra("detail_order", data.getDetailOrder());
+                    intent.putExtra("from_activity", "order");
                     view.getContext().startActivity(intent);
                 }
             }

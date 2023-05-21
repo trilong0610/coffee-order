@@ -67,6 +67,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableItemVie
                     Intent intent = new Intent(context, PaymentOrderActivity.class);
                     intent.putExtra("id_table", tableModel.idTable);
                     intent.putExtra("id_order", tableModel.idOrder);
+                    intent.putExtra("from_activity", "main");
                     context.startActivity(intent);
                 }
 

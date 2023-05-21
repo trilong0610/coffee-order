@@ -1,5 +1,6 @@
 package com.example.coffeeorder.data;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coffeeorder.R;
 import com.example.coffeeorder.model.OrderModel;
+import com.google.firebase.database.collection.LLRBNode;
 
 import java.util.ArrayList;
 
@@ -51,6 +53,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         holder.id_user.setText(data.getIdUser());
         holder.id_table.setText(data.getIdTable());
         holder.detail_order.setText(data.getDetailOrder());
+        if(data.statusOrder == 0) {
+            holder.itemView.setBackgroundColor(Color.RED);
+        }
+            else if(data.statusOrder == 1)
+                holder.itemView.setBackgroundColor(Color.YELLOW);
+            else
+        {
+            holder.itemView.setBackgroundColor(Color.GREEN);
+        }
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
 
     private ArrayList<OrderModel> dataList;
-
+    private ArrayList<OrderModel> filteredList;
     public class OrderViewHolder extends RecyclerView.ViewHolder {
         public TextView id_order, time_order, time_complete, status_order,total_order,id_user,id_table,detail_order;
 
@@ -35,6 +35,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     }
     public OrderAdapter(ArrayList<OrderModel> dataList) {
         this.dataList = dataList;
+        this.filteredList = new ArrayList<>(dataList);
     }
 
     @Override
@@ -79,7 +80,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             }
             );
     }
-
+    public void filterList(ArrayList<OrderModel> filterList) {
+        dataList = filterList;
+        notifyDataSetChanged();
+    }
     @Override
     public int getItemCount() {
         return dataList.size();

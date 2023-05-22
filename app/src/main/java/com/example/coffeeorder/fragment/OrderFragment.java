@@ -1,10 +1,14 @@
 package com.example.coffeeorder.fragment;
 
+import android.content.ClipData;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -29,7 +33,9 @@ import java.util.ArrayList;
 public class OrderFragment extends Fragment {
     //private ArrayList<OrderModel> listOrders;
     private ArrayList<OrderModel> dataList;
-    ArrayList<OrderDetailModel> orderDetails;
+    private ArrayList<OrderModel> filteredList;
+    private ArrayList<OrderDetailModel> orderDetails;
+
     private RecyclerView recyclerView;
     private OrderAdapter mAdapter;
 
@@ -46,9 +52,41 @@ public class OrderFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
+        // Xử lý sự kiện tìm kiếm
+        // 1. Lấy dữ liệu từ Firebase
+        // 2. Lọc dữ liệu
+        // 3. Hiển thị dữ liệu
+
+        EditText searchEditText = view.findViewById(R.id.searchEditText);
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String keyword = s.toString().trim();
+                filter(keyword);
+            }
+        });
         prepareMovieData();
         return view;
 
+    }
+    private void filter(String keyword) {
+        filteredList.clear();
+
+        for (OrderModel item : dataList) {
+            if (item.getIdUser().toLowerCase().contains(keyword.toLowerCase())||item.getIdTable().toLowerCase().contains(keyword.toLowerCase())) {
+                filteredList.add(item);
+            }
+        }
+
+        mAdapter.filterList(filteredList);
     }
 
     private void prepareMovieData()
@@ -67,6 +105,7 @@ public class OrderFragment extends Fragment {
 
     private void initView(View view) {
         dataList = new ArrayList<OrderModel>();
+        filteredList = new ArrayList<>(dataList);
     }
 
     // load danh sach order tu db

@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
 
     private ArrayList<OrderModel> currentListOrders;
-
+    
     private boolean endData = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

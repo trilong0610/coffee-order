@@ -13,26 +13,71 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="30dp"
+            android:background="#99CCFF"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView_animated_icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="start|top"
+                android:layout_marginLeft="5dp"
+
+                android:src="@drawable/star1_48px" />
+
+            <ImageView
+                android:id="@+id/imageView_animated_icon1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="50dp"
+                android:src="@drawable/favorite1_48px" />
+
+            <ImageView
+                android:id="@+id/imageView_animated_icon2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="start|top"
+                android:layout_marginLeft="50dp"
+                android:src="@drawable/like1_up_48px" />
+        </LinearLayout>
+
         <TextView
             android:id="@+id/txt_item_table_id"
-            android:layout_margin="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/txt_item_table_quantity"
-            android:layout_margin="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
         <TextView
             android:id="@+id/txt_item_table_status"
-            android:layout_margin="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
         <TextView
             android:id="@+id/txt_item_table_idOrder"
-            android:layout_margin="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textColor="#000000"
+            android:textSize="14sp" />
 
     </LinearLayout>
 

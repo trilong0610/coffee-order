@@ -93,6 +93,7 @@ public class ProductActivity extends AppCompatActivity {
         listOrderDetail = new ArrayList<OrderDetailModel>();
         slideToActView = findViewById(R.id.slide_product_order);
         txt_bill = findViewById(R.id.txt_product_bill);
+
         //        Set layout de hien thi thong tin trong recycle view
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
 

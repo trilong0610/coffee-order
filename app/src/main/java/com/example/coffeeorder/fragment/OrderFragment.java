@@ -1,6 +1,7 @@
 package com.example.coffeeorder.fragment;
 
 import android.content.ClipData;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -8,9 +9,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -52,11 +57,8 @@ public class OrderFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
-        // Xử lý sự kiện tìm kiếm
-        // 1. Lấy dữ liệu từ Firebase
-        // 2. Lọc dữ liệu
-        // 3. Hiển thị dữ liệu
 
+        //Xử lý search
         EditText searchEditText = view.findViewById(R.id.searchEditText);
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -73,10 +75,31 @@ public class OrderFragment extends Fragment {
                 filter(keyword);
             }
         });
+        //Xử lý spinner
+        Spinner filterSpinner = view.findViewById(R.id.spinner2);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(
+                getContext(),
+                R.array.filter_options, // Tạo một mảng string trong strings.xml với các tùy chọn lọc
+                android.R.layout.simple_spinner_item
+        );
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        filterSpinner.setAdapter(spinnerAdapter);
+        filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedOption = parent.getItemAtPosition(position).toString();
+                filterStatus(selectedOption);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
         prepareMovieData();
         return view;
-
     }
+
+
     private void filter(String keyword) {
         filteredList.clear();
 
@@ -88,14 +111,57 @@ public class OrderFragment extends Fragment {
 
         mAdapter.filterList(filteredList);
     }
+    private void filterStatus(String selectedOption) {
+        filteredList.clear();
+
+        // Lọc dữ liệu dựa trên tùy chọn được chọn
+        if (selectedOption.equals("Tất cả")) {
+            // Lọc dữ liệu cho Option 1
+            for (OrderModel item : dataList) {
+
+                // Kiểm tra và thêm item vào danh sách lọc
+                if (item.getStatusOrder() == 0 || item.getStatusOrder() == 1 || item.getStatusOrder() == 2) {
+                    filteredList.add(item);
+                }
+            }
+        }
+        if (selectedOption.equals("Chưa hoàn thành (0)")) {
+            // Lọc dữ liệu cho Option 1
+            for (OrderModel item : dataList) {
+
+                // Kiểm tra và thêm item vào danh sách lọc
+                if (item.getStatusOrder() == 0) {
+                    filteredList.add(item);
+                }
+            }
+        } else if (selectedOption.equals("Đã hoàn thành (1)")) {
+            // Lọc dữ liệu cho Option 2
+            for (OrderModel item : dataList) {
+                // Kiểm tra và thêm item vào danh sách lọc
+                if (item.getStatusOrder() == 1) {
+                    filteredList.add(item);
+                }
+            }
+        } else if (selectedOption.equals("Đã thanh toán (2)")) {
+            // Lọc dữ liệu cho Option 3
+            for (OrderModel item : dataList) {
+                // Kiểm tra và thêm item vào danh sách lọc
+                if (item.getStatusOrder() == 2) {
+                    filteredList.add(item);
+                }
+            }
+        }
+
+        mAdapter.filterList(filteredList);
+    }
 
     private void prepareMovieData()
     {
         loadData();
-        OrderModel orderModel = new OrderModel("1", 1, 20000, "User", "Detail Order", "1", orderDetails);
+        /*OrderModel orderModel = new OrderModel("1", 1, 20000, "User", "Detail Order", "1", orderDetails);
         dataList.add(orderModel);
         orderModel = new OrderModel("2", 2, 20000, "User", "Detail Order", "1", orderDetails);
-        dataList.add(orderModel);
+        dataList.add(orderModel);*/
         mAdapter.notifyDataSetChanged();
     }
     private void initEvent(View view) {

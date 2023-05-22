@@ -2,4 +2,10 @@
     <string name="app_name">CoffeeOrder</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="filter_options">
+        <item>Tất cả</item>
+        <item>Chưa hoàn thành (0)</item>
+        <item>Đã hoàn thành (1)</item>
+        <item>Đã thanh toán (2)</item>
+    </string-array>
 </resources>

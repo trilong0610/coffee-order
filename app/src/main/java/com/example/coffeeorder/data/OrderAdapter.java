@@ -56,13 +56,13 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         holder.id_table.setText(data.getIdTable());
         holder.detail_order.setText(data.getDetailOrder());
         if(data.statusOrder == 0) {
-            holder.itemView.setBackgroundColor(Color.RED);
+            holder.itemView.setBackgroundColor(Color.parseColor("#850000"));
         }
             else if(data.statusOrder == 1)
-                holder.itemView.setBackgroundColor(Color.YELLOW);
+                holder.itemView.setBackgroundColor(Color.parseColor("#d47f00"));
             else
         {
-            holder.itemView.setBackgroundColor(Color.GREEN);
+            holder.itemView.setBackgroundColor(Color.parseColor("#00963a"));
         }
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

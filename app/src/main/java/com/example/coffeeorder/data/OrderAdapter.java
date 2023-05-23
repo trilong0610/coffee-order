@@ -2,11 +2,13 @@ package com.example.coffeeorder.data;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coffeeorder.R;
@@ -56,13 +58,14 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         holder.id_table.setText(data.getIdTable());
         holder.detail_order.setText(data.getDetailOrder());
         if(data.statusOrder == 0) {
-            holder.itemView.setBackgroundColor(Color.parseColor("#850000"));
+            holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.color.red));
         }
             else if(data.statusOrder == 1)
                 holder.itemView.setBackgroundColor(Color.parseColor("#d47f00"));
             else
         {
-            holder.itemView.setBackgroundColor(Color.parseColor("#00963a"));
+
+            holder.itemView.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.color.green));
         }
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

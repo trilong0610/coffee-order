@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
-    android:background="@color/white"
+    android:background="#EDF1EF"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -20,24 +20,25 @@
         android:id="@+id/main_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="#EDF1EF"
         android:layout_below="@+id/textview"
         android:layout_above="@id/bottom_nav_menu"
         >
     </FrameLayout>
+
     <com.ismaeldivita.chipnavigation.ChipNavigationBar
         android:id="@+id/bottom_nav_menu"
-        android:layout_width="match_parent"
-        android:textAlignment="center"
-        android:layout_height="48dp"
-        app:cnb_menuResource="@menu/bottom_menu"
+        android:layout_width="404dp"
+        android:layout_height="58dp"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/round_corners"
-        app:cnb_orientationMode="horizontal"
-        android:layout_marginBottom="10dp"
         android:layout_marginLeft="7dp"
         android:layout_marginRight="7dp"
+        android:layout_marginBottom="0dp"
+        android:background="@drawable/round_corners"
         android:elevation="5dp"
+        android:textAlignment="center"
         app:cnb_animationDuration="175"
-        app:cnb_radius="8dp"/>
+        app:cnb_menuResource="@menu/bottom_menu"
+        app:cnb_orientationMode="horizontal"
+        app:cnb_radius="8dp" />
 </RelativeLayout>

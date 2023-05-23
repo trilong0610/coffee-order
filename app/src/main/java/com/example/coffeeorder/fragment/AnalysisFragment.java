@@ -38,7 +38,6 @@ public class AnalysisFragment extends Fragment implements View.OnClickListener {
     TextInputLayout txtLayoutToDate;
     TextInputEditText edtFromDate;
     TextInputEditText edtToDate;
-    TextInputLayout menuFilter;
     TextView txtTotalBill;
     TextView txtTotalProduct;
     TextView txtTotalOrder;
@@ -66,8 +65,8 @@ public class AnalysisFragment extends Fragment implements View.OnClickListener {
 
         listOrderDetails = new ArrayList<>();
         listOrders = new ArrayList<>();
-        //gan gia tri mac dinh cho ngay
 
+        //gan gia tri mac dinh cho ngay
         // Ngay bat dau = ngay hien tai - 30 ngay
         Date dt = new Date();
         calendarFromTime.setTime(dt);
@@ -76,7 +75,6 @@ public class AnalysisFragment extends Fragment implements View.OnClickListener {
         // Ngay ket thuc
         updateTimeToEditText(edtToDate, calendarToTime);
 
-        menuFilter = view.findViewById(R.id.menu_analysis_filter);
         txtTotalBill = view.findViewById(R.id.txt_analysis_total_bill);
         txtTotalProduct = view.findViewById(R.id.txt_analysis_total_product);
         txtTotalOrder = view.findViewById(R.id.txt_analysis_total_order);

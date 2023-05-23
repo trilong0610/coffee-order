@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="5dp"
     tools:context=".fragment.AdminFragment">
@@ -11,16 +12,22 @@
         android:id="@+id/btn_admin_add_table"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Them Ban" />
+        app:backgroundTint="@color/white"
+        android:textColor="@color/black"
+        android:text="THÊM BÀN" />
     <Button
         android:id="@+id/btn_admin_add_order"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Them Ban" />
-    <Button
+        app:backgroundTint="@color/white"
+        android:textColor="@color/black"
+        android:text="THÊM ĐƠN" />
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_admin_logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Dang xuat" />
+        android:layout_gravity="center_horizontal"
+        app:backgroundTint="@color/black"
+        android:text="Đăng nhập" />
 
 </LinearLayout>

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:roundcorners="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.OrderFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -87,6 +88,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_margin="10dp"
+            roundcorners:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical" />

@@ -28,6 +28,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         app:backgroundTint="@color/black"
-        android:text="Đăng nhập" />
+        android:text="ĐĂNG XUẤT" />
 
 </LinearLayout>

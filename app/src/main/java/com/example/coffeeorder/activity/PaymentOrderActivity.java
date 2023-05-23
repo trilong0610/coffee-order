@@ -109,12 +109,14 @@ public class PaymentOrderActivity extends AppCompatActivity {
                 if (orderModel.statusOrder == 0){
                     // Chua pha che
                     // gan thanh truot = hoan thanh
-                    if (fromActivity.equals("main")){
-                        // Neu truy cap tu acti ban -> khong cho cap nhat pha che
-                        slideComplete.setVisibility(View.INVISIBLE);
+                    if (MainActivity.permission == 0 || MainActivity.permission == 2){
+                        // Neu la account admin hoac pha che -> cho cap nhat pha che
+                        slideComplete.setVisibility(View.VISIBLE);
+                        slideComplete.setText("Pha chế hoàn thành");
                     }
                     else {
-                        slideComplete.setText("Pha chế hoàn thành");
+                        // Neu la account phuc vu -> khong cho cap nhat pha che
+                        slideComplete.setVisibility(View.INVISIBLE);
                     }
 
                 }
@@ -122,11 +124,17 @@ public class PaymentOrderActivity extends AppCompatActivity {
                 if (orderModel.statusOrder == 1){
                     // Da pha che
                     // gan thanh truot = thanh toan
-                    if (fromActivity.equals("order")){
-                        // Neu truy cap tu acti order -> khong cho hoan thanh don
+                    if (MainActivity.permission == 0 || MainActivity.permission == 1){
+                        // Neu la account admin hoac phuc vu -> cho hoan thanh don
+                        slideComplete.setVisibility(View.VISIBLE);
+                        slideComplete.setText("Thanh toán");
+                    }
+                    else {
+                        // Neu la account pha che -> khong cho hoan thanh don
                         slideComplete.setVisibility(View.INVISIBLE);
                     }
-                    slideComplete.setText("Thanh toán");
+
+
                 }
                 if (orderModel.statusOrder == 2){
                     // da thanh toan

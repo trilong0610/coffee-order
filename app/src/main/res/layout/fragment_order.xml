@@ -11,7 +11,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <!--    Chon loai-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/menu_analysis_filter"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout1"
+            android:hint="Loại">
 
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:inputType="none"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
         <EditText
             android:id="@+id/searchEditText"
             android:textColor="@color/black"

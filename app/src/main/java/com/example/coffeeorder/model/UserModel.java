@@ -1,32 +1,54 @@
 package com.example.coffeeorder.model;
 
-import com.google.firebase.database.Exclude;
-
-import java.util.HashMap;
-import java.util.Map;
-
 public class UserModel {
-    public String idUser;
-    public String nameUser;
-    public long salaryUser;
-    public long idOffice;
+    public String uid;
+    public String name;
+    public int salary;
+
+    // 0: admin
+    // 1: Phuc vu
+    // 2: Pha che
+    public int permission;
 
     public UserModel() {
     }
 
-    public UserModel(String idUser, String nameUser, long salaryUser, long idOffice) {
-        this.idUser = idUser;
-        this.nameUser = nameUser;
-        this.salaryUser = salaryUser;
-        this.idOffice = idOffice;
+    public UserModel(String uid, String name, int salary, int permission) {
+        this.uid = uid;
+        this.name = name;
+        this.salary = salary;
+        this.permission = permission;
     }
-    @Exclude
-    public Map<String, Object> toMap() {
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("idUser", idUser);
-        result.put("nameUser", nameUser);
-        result.put("salaryUser", salaryUser);
-        result.put("idOffice", idOffice);
-        return result;
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    public void setSalary(int salary) {
+        this.salary = salary;
+    }
+
+    public int getPermission() {
+        return permission;
+    }
+
+    public void setPermission(int permission) {
+        this.permission = permission;
     }
 }

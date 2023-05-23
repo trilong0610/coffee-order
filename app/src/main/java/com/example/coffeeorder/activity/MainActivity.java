@@ -17,6 +17,11 @@ import com.example.coffeeorder.fragment.AnalysisFragment;
 import com.example.coffeeorder.fragment.HomeFragment;
 import com.example.coffeeorder.fragment.OrderFragment;
 import com.example.coffeeorder.model.OrderModel;
+import com.example.coffeeorder.model.UserModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,6 +33,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     public static DatabaseReference mDatabase;
+
+    public static int permission = -1;
     private View mainContainer;
     private ChipNavigationBar chipNavigationBar;
     private FragmentManager fragmentManager;
@@ -56,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Add fragment home vao View
         addFragment(new HomeFragment(), false);
+        getPermissionAccount();
 
     }
 
@@ -151,6 +159,26 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void getPermissionAccount(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String uid = user.getUid();
+            mDatabase.child("User").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    for (DataSnapshot snapshot: task.getResult().getChildren()) {
+                        UserModel userModel = snapshot.getValue(UserModel.class);
+                        if (userModel.getUid().equals(uid)){
+                            permission = userModel.getPermission();
+                            return;
+                        }
+                    }
+
+
+                }
+            });
+        }
+    }
     public DatabaseReference getDBInstance(){
         return this.mDatabase;
     }

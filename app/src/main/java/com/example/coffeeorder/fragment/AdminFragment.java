@@ -1,23 +1,23 @@
 package com.example.coffeeorder.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.example.coffeeorder.R;
-import com.example.coffeeorder.model.OrderModel;
+import com.example.coffeeorder.activity.LoginActivity;
 import com.example.coffeeorder.model.TableModel;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +25,7 @@ public class AdminFragment extends Fragment implements View.OnClickListener {
     private DatabaseReference mDatabase;
     private Button btnAddTable;
     private Button btnAddOrder;
+    private Button btnAddLogout;
 
     @Nullable
     @Override
@@ -39,12 +40,14 @@ public class AdminFragment extends Fragment implements View.OnClickListener {
     private void initView(View view){
         btnAddTable = view.findViewById(R.id.btn_admin_add_table);
         btnAddOrder = view.findViewById(R.id.btn_admin_add_order);
+        btnAddLogout = view.findViewById(R.id.btn_admin_logout);
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     private void initEvent(View view){
         btnAddTable.setOnClickListener(this::onClick);
         btnAddOrder.setOnClickListener(this::onClick);
+        btnAddLogout.setOnClickListener(this::onClick);
     }
 
     @Override
@@ -67,6 +70,12 @@ public class AdminFragment extends Fragment implements View.OnClickListener {
         }
         if (view == btnAddOrder){
 
+        }
+        if (view == btnAddLogout){
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            mAuth.signOut();
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
         }
     }
 }

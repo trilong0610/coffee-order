@@ -1,6 +1,8 @@
 package com.example.coffeeorder.activity;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -153,6 +155,16 @@ public class ProductActivity extends AppCompatActivity {
         rv_product_main.setAdapter(adapter);
 
         rv_product_main.scrollToPosition(listProduct.size() - 1);
+
+        // Kiem tra quyen
+        // Chi cho phuc vu hoac admin them
+        Log.d("TAG_D", String.valueOf(MainActivity.permission));
+        if (MainActivity.permission == 0 || MainActivity.permission == 1){
+            slideToActView.setVisibility(View.VISIBLE);
+        }
+        else{
+            slideToActView.setVisibility(View.INVISIBLE);
+        }
 
     }
     private void loadData(){

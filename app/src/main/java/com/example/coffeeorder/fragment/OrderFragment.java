@@ -1,21 +1,17 @@
 package com.example.coffeeorder.fragment;
 
-import android.content.ClipData;
-import android.graphics.Color;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -27,6 +23,11 @@ import com.example.coffeeorder.activity.MainActivity;
 import com.example.coffeeorder.data.OrderAdapter;
 import com.example.coffeeorder.model.OrderDetailModel;
 import com.example.coffeeorder.model.OrderModel;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,6 +35,9 @@ import com.google.firebase.database.DatabaseError;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class OrderFragment extends Fragment {
     //private ArrayList<OrderModel> listOrders;
@@ -44,58 +48,28 @@ public class OrderFragment extends Fragment {
     private RecyclerView recyclerView;
     private OrderAdapter mAdapter;
 
+    private FloatingActionButton btnOpenFilter;
+    private BottomSheetDialog bottomSheetDialog;
+
+    TextInputEditText edtFromDate;
+    TextInputEditText edtToDate;
+
+    TextInputLayout layoutMenuFilter;
+
+    MaterialDatePicker datePicker;
+    Calendar calendarFromTime = Calendar.getInstance();
+    Calendar calendarToTime = Calendar.getInstance();
+
+    AutoCompleteTextView menuType;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view=  inflater.inflate(R.layout.fragment_order, container, false);
         initView(view);
-        recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
-        mAdapter = new OrderAdapter(dataList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mAdapter);
+        initEvent(view);
 
-        //Xử lý search
-        EditText searchEditText = view.findViewById(R.id.searchEditText);
-        searchEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String keyword = s.toString().trim();
-                filter(keyword);
-            }
-        });
-        //Xử lý spinner
-        Spinner filterSpinner = view.findViewById(R.id.spinner2);
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(
-                getContext(),
-                R.array.filter_options, // Tạo một mảng string trong strings.xml với các tùy chọn lọc
-                android.R.layout.simple_spinner_item
-        );
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        filterSpinner.setAdapter(spinnerAdapter);
-        filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedOption = parent.getItemAtPosition(position).toString();
-                filterStatus(selectedOption);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-        prepareMovieData();
         return view;
     }
 
@@ -154,36 +128,63 @@ public class OrderFragment extends Fragment {
 
         mAdapter.filterList(filteredList);
     }
-
-    private void prepareMovieData()
-    {
-        loadData();
-        /*OrderModel orderModel = new OrderModel("1", 1, 20000, "User", "Detail Order", "1", orderDetails);
-        dataList.add(orderModel);
-        orderModel = new OrderModel("2", 2, 20000, "User", "Detail Order", "1", orderDetails);
-        dataList.add(orderModel);*/
-        mAdapter.notifyDataSetChanged();
-    }
-    private void initEvent(View view) {
-        //loadData();
-
-    }
-
     private void initView(View view) {
         dataList = new ArrayList<OrderModel>();
         filteredList = new ArrayList<>(dataList);
-    }
+        recyclerView = view.findViewById(R.id.recyclerView);
+        btnOpenFilter = view.findViewById(R.id.floatbtn_order_open_filter);
 
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+        mAdapter = new OrderAdapter(dataList);
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
+
+        edtFromDate = view.findViewById(R.id.edt_order_from_date);
+        edtToDate = view.findViewById(R.id.edt_order_to_date);
+        layoutMenuFilter = view.findViewById(R.id.menu_order_filter);
+        //gan gia tri mac dinh cho ngay
+        // Ngay bat dau = ngay hien tai - 30 ngay
+        Date dt = new Date();
+        calendarFromTime.setTime(dt);
+        calendarFromTime.add(Calendar.DATE, -30);
+        updateTimeToEditText(edtFromDate, calendarFromTime);
+        // Ngay ket thuc
+        updateTimeToEditText(edtToDate, calendarToTime);
+
+        // gan item cho menu dropdown
+        ArrayList<String> items = new ArrayList<>();
+        items.add("Chưa pha chế");
+        items.add("Đã pha chế");
+        items.add("Đã thanh toán");
+        ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), R.layout.item_menu_type, items);
+        menuType = (AutoCompleteTextView) layoutMenuFilter.getEditText();
+        menuType.setAdapter(arrayAdapter);
+        menuType.setText("Chưa pha chế", false);
+
+        loadData(0);
+    }
+    private void initEvent(View view) {
+        menuType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("TAG", String.valueOf(position));
+                loadData(position);
+            }
+        });
+    }
     // load danh sach order tu db
-    private void loadData(){
-        MainActivity.mDatabase.child("Order").addChildEventListener(new ChildEventListener() {
+    private void loadData(int status){
+        dataList.clear();
+        mAdapter.notifyDataSetChanged();
+        MainActivity.mDatabase.child("Order").orderByChild("statusOrder").equalTo(status).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 OrderModel orderModel = snapshot.getValue(OrderModel.class);
                 Log.d("TAG", String.valueOf(orderModel.idOrder));
                 dataList.add(orderModel);
-
-
                 // cap nhat adapter
                 mAdapter.notifyDataSetChanged();
 //                ---------------Cuộn đến item trên cùng khi thêm---------------------------
@@ -219,6 +220,13 @@ public class OrderFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
+
+
         });
+    }
+    private void updateTimeToEditText(EditText editText, Calendar calendar){
+        String format = "dd/MM/yyyy";
+        SimpleDateFormat dateFormat=new SimpleDateFormat(format, Locale.US);
+        editText.setText(dateFormat.format(calendar.getTime()));
     }
 }

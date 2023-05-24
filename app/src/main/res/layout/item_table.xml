@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="10dp"
-    app:cardCornerRadius="10dp"
+    app:cardCornerRadius="15dp"
     app:cardElevation="5dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -19,44 +19,74 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_margin="10dp"
             app:cardElevation="8dp"
             app:cardCornerRadius="15dp">
 
             <ImageView
                 android:id="@+id/img_item_order_image"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="200sp"
+                android:layout_height="155dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ban" />
         </androidx.cardview.widget.CardView>
-
-
-
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/txt_maban"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/bungee"
+            android:textColor="@color/black"
+            android:text="Mã bàn :" />
         <TextView
             android:id="@+id/txt_item_table_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textColor="#000000"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/txt_item_table_quantity"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/bungee"/>
+      </LinearLayout>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textColor="#000000"
-            android:textSize="14sp" />
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/txt_sl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/bungee"
+                android:textColor="@color/black"
+                android:text="SL :" />
+            <TextView
+                android:id="@+id/txt_item_table_quantity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/bungee" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/txt_item_table_status"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textColor="#000000"
-            android:textSize="14sp" />
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/txt_trangthai"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/bungee"
+                android:textColor="@color/black"
+                android:text="Trạng Thái: " />
+            <TextView
+                android:id="@+id/txt_item_table_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/bungee"/>
+        </LinearLayout>
 
     </LinearLayout>
 

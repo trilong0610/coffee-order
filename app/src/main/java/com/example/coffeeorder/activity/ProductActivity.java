@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 public class ProductActivity extends AppCompatActivity {
     private RecyclerView rv_product_main;
-    private ArrayList<ProductModel> listProduct;
+    private ArrayList<OrderDetailModel> dataList;
     private ProductAdapter adapter;
     private String id_table;
     private MaterialTextView txt_bill;
@@ -53,7 +53,7 @@ public class ProductActivity extends AppCompatActivity {
 
     private void initView(){
         rv_product_main = findViewById(R.id.rv_product_main);
-        listProduct = new ArrayList<ProductModel>();
+        dataList = new ArrayList<OrderDetailModel>();
         listOrderDetail = new ArrayList<OrderDetailModel>();
         slideToActView = findViewById(R.id.slide_product_order);
         txt_bill = findViewById(R.id.txt_product_bill);
@@ -70,47 +70,11 @@ public class ProductActivity extends AppCompatActivity {
 //        rvUsers.setLayoutManager(new GridLayoutManager(getContext(), 1));
         rv_product_main.setLayoutManager(gridLayoutManager);
 
-        adapter = new ProductAdapter(listProduct, this, new ProductAdapter.OnItemChangeListener() {
+        adapter = new ProductAdapter(dataList, this, new ProductAdapter.OnItemChangeListener() {
             @Override
-            public void onItemAdd(ProductModel item, int number) {
-
-                // Tim san pham trong list order
-                boolean flag = false;
-                for (OrderDetailModel orderDetailModel: listOrderDetail) {
-                    if (orderDetailModel.product.idProduct == item.idProduct){
-                        // Tim thay => thay doi sl
-                        orderDetailModel.quantity += number;
-                        flag = true;
-                        break;
-                    }
-                }
-                if (!flag){
-                    // Khong tim thay => them moi
-                    listOrderDetail.add(new OrderDetailModel(item, number));
-                }
-
-                txt_bill.setText(getBill(listOrderDetail));
-
-            }
-
-            @Override
-            public void onItemDelete(ProductModel item, int number) {
-                // Tim san pham trong list order
-                // Tim san pham trong list order
-                for (OrderDetailModel orderDetailModel: listOrderDetail) {
-                    if (orderDetailModel.product.idProduct == item.idProduct){
-                        // Tim thay => thay doi sl
-                        orderDetailModel.quantity -= number;
-                        // Kiem tra neu sl = 0 => Xoa
-                        if (orderDetailModel.quantity <= 0){
-                            listOrderDetail.remove(orderDetailModel);
-                        }
-
-                        break;
-                    }
-                }
-                txt_bill.setText(getBill(listOrderDetail));
-
+            public void updateList(ArrayList<OrderDetailModel> orderDetailModels) {
+                dataList = orderDetailModels;
+                txt_bill.setText(getBill(dataList));
             }
 
         });
@@ -195,17 +159,17 @@ public class ProductActivity extends AppCompatActivity {
                     if (edtSearch.getEditText().getText().toString().equalsIgnoreCase("")){
                         // ng dung xoa keyword
                         // Tra ve full product
-                        adapter.updateAdapter(listProduct);
+                        adapter.updateAdapter(dataList);
                     }
                     else {
                         String key = edtSearch.getEditText().getText().toString();
                         Log.d("Tag_searcg", key);
-                        ArrayList<ProductModel> listTemp = new ArrayList<>();
+                        ArrayList<OrderDetailModel> listTemp = new ArrayList<>();
 
                         // lay danh sach nhung sp co ten = key
-                        listProduct.forEach((item) -> {
-                            if (item.nameProduct.toLowerCase().contains(key.toLowerCase())) {
-                                listTemp.add(item);
+                        dataList.forEach((detail) -> {
+                            if (detail.product.nameProduct.toLowerCase().contains(key.toLowerCase())) {
+                                listTemp.add(detail);
                             }
                         });
 
@@ -226,10 +190,11 @@ public class ProductActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 ProductModel productModel = snapshot.getValue(ProductModel.class);
 
-                listProduct.add(productModel);
+                dataList.add(new OrderDetailModel(productModel, 0));
 
                 adapter.notifyDataSetChanged();
 
+                rv_product_main.scrollToPosition(dataList.size() - 1);
             }
 
             @Override

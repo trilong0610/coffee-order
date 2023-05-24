@@ -15,25 +15,23 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coffeeorder.R;
-import com.example.coffeeorder.model.ProductModel;
+import com.example.coffeeorder.model.OrderDetailModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductItemViewHolder>{
-    private ArrayList<ProductModel> productModels;
+    public ArrayList<OrderDetailModel> orderDetailModels;
     private Context context;
     @NonNull
     private OnItemChangeListener onItemCheckListener;
     public interface OnItemChangeListener {
         // item: san pham can tuong tac
-        // number: so luong thay doi
-        void onItemAdd(ProductModel item, int number);
-        void onItemDelete(ProductModel item, int number);
+        void updateList(ArrayList<OrderDetailModel> orderDetailModels);
     }
 
-    public ProductAdapter(ArrayList<ProductModel> productModels, Context c, @NonNull OnItemChangeListener onItemCheckListener) {
-        this.productModels = productModels;
+    public ProductAdapter(ArrayList<OrderDetailModel> orderDetailModels, Context c, @NonNull OnItemChangeListener onItemCheckListener) {
+        this.orderDetailModels = orderDetailModels;
         this.context = c;
         this.onItemCheckListener = onItemCheckListener;
     }
@@ -48,11 +46,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
 
     @Override
     public void onBindViewHolder(@NonNull ProductItemViewHolder holder, int position) {
-        ProductModel productModel = productModels.get(position);
-        holder.txtItemProductName.setText(productModel.nameProduct);
-        holder.txtItemProductPrice.setText(String.valueOf(productModel.priceProduct));
-        Picasso.get().load(productModel.imgProduct).into(holder.imgItemProductImage);
-
+        OrderDetailModel orderDetailModel = orderDetailModels.get(position);
+        holder.txtItemProductName.setText(orderDetailModel.product.nameProduct);
+        holder.txtItemProductPrice.setText(String.valueOf(orderDetailModel.product.priceProduct));
+        holder.edtItemProductQuantity.setText(String.valueOf(orderDetailModel.quantity));
+        Picasso.get().load(orderDetailModel.product.imgProduct).into(holder.imgItemProductImage);
         InputFilter filter = new InputFilter() {
             public CharSequence filter(CharSequence source, int start, int end,
                                        Spanned dest, int dstart, int dend) {
@@ -76,17 +74,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
         holder.btn_item_product_plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int quantity = Integer.parseInt(holder.edtItemProductQuantity.getText().toString());
-                holder.edtItemProductQuantity.setText(String.valueOf(quantity + 1));
+                orderDetailModels.get(holder.getAdapterPosition()).quantity += 1;
+                holder.edtItemProductQuantity.setText(String.valueOf(orderDetailModels.get(holder.getAdapterPosition()).quantity));
             }
         });
 
         holder.btn_item_product_minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int quantity = Integer.parseInt(holder.edtItemProductQuantity.getText().toString());
-                if (quantity > 0)
-                    holder.edtItemProductQuantity.setText(String.valueOf(quantity - 1));
+                if (orderDetailModels.get(holder.getAdapterPosition()).quantity > 0){
+                    orderDetailModels.get(holder.getAdapterPosition()).quantity -= 1;
+                    holder.edtItemProductQuantity.setText(String.valueOf(orderDetailModels.get(holder.getAdapterPosition()).quantity));
+                }
+
             }
         });
 
@@ -98,13 +98,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                // Kiem tra neu nhap < 0 ko cho nhap
-
-                String text = holder.edtItemProductQuantity.getText().toString();
-                if (text.isEmpty() == false){
-                    oldQuantity = Integer.parseInt(holder.edtItemProductQuantity.getText().toString());
-                }
-
             }
 
             @Override
@@ -115,25 +108,17 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
             @Override
             public void afterTextChanged(Editable editable) {
 
-
-
                 String quantity = holder.edtItemProductQuantity.getText().toString();
                 if (quantity.isEmpty()){
                     return;
                 }
 
-
-
                 int numQuantity = Integer.parseInt(quantity);
 
-                if (numQuantity > oldQuantity){
-                    // tang so luong
-                    onItemCheckListener.onItemAdd(productModel, numQuantity - oldQuantity);
-                }
-                else{
-                    // giam so luong
-                    onItemCheckListener.onItemDelete(productModel, oldQuantity - numQuantity);
-                }
+                orderDetailModels.get(holder.getAdapterPosition()).quantity = numQuantity;
+
+
+                onItemCheckListener.updateList(orderDetailModels);
             }
         });
 
@@ -141,7 +126,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
 
     @Override
     public int getItemCount() {
-        return productModels.size();
+        return orderDetailModels.size();
     }
 
 
@@ -164,8 +149,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
         }
     }
 
-    public void updateAdapter(ArrayList<ProductModel> productModels){
-        this.productModels = productModels;
+    public void updateAdapter(ArrayList<OrderDetailModel> orderDetailModels){
+        this.orderDetailModels = orderDetailModels;
         notifyDataSetChanged();
     }
 }

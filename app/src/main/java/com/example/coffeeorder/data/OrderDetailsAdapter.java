@@ -1,6 +1,7 @@
 package com.example.coffeeorder.data;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coffeeorder.R;
@@ -41,6 +43,23 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapte
         holder.txtItemOrderQuantity.setText(String.valueOf(orderDetailModel.quantity));
         Picasso.get().load(orderDetailModel.product.imgProduct).into(holder.imgItemOrderImage);
 
+        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+// Hien thi thong bao
+                new AlertDialog.Builder(c)
+                        .setMessage("Bạn muốn xóa sản phẩm " + orderDetailModel.product.nameProduct + " ?")
+                        .setCancelable(true)
+                        .setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                        .setNegativeButton("Hủy", null)
+                        .show();
+            }
+        });
     }
 
     @Override
@@ -53,12 +72,15 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapte
         public TextView txtItemOrderName;
         public TextView txtItemOrderPrice;
         public TextView txtItemOrderQuantity;
+
+        public ImageView btnDelete;
         public OrderItemViewHolder(@NonNull View itemView) {
             super(itemView);
             imgItemOrderImage = itemView.findViewById(R.id.img_item_order_image);
             txtItemOrderName = itemView.findViewById(R.id.txt_item_order_name);
             txtItemOrderPrice = itemView.findViewById(R.id.txt_item_order_price);
             txtItemOrderQuantity = itemView.findViewById(R.id.txt_item_order_quantity);
+            btnDelete = itemView.findViewById(R.id.btn_item_order_delete);
         }
     }
 }

@@ -21,13 +21,14 @@
             app:cardCornerRadius="15dp">
         <ImageView
             android:id="@+id/img_item_product_image"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:scaleType="centerCrop"/>
         </androidx.cardview.widget.CardView>
+
         <TextView
             android:id="@+id/txt_item_product_name"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:textSize="18sp"
             android:textColor="#FF0000"
             android:textStyle="bold|italic"
@@ -65,15 +66,15 @@
             android:layout_marginRight="10dp"
             android:layout_toRightOf="@+id/cardview" />
 
-        <Button
+        <ImageView
             android:id="@+id/btn_item_product_minus"
-            android:layout_width="50dp"
+            android:src="@drawable/baseline_horizontal_rule_24"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/txt_item_product_price"
-            android:layout_alignLeft="@+id/txt_item_product_price"
-            android:layout_marginLeft="-42dp"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
+            android:layout_alignLeft="@+id/txt_item_product_name"
+            android:layout_alignBottom="@+id/edt_item_product_quantity"
+            android:layout_marginRight="15dp"
             android:text="-" />
 
         <com.google.android.material.textfield.TextInputEditText
@@ -82,22 +83,21 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/txt_item_product_price"
             android:focusedByDefault="false"
-            android:layout_marginLeft="0dp"
             android:layout_marginTop="10dp"
-            android:layout_marginRight="1dp"
             android:layout_toLeftOf="@+id/btn_item_product_plus"
             android:layout_toRightOf="@+id/btn_item_product_minus"
-            android:layout_weight="3"
             android:text="0"
             android:textAlignment="center" />
 
-        <Button
+        <ImageView
             android:id="@+id/btn_item_product_plus"
-            android:layout_width="50dp"
+            android:src="@drawable/baseline_add_24"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/txt_item_product_price"
             android:layout_alignRight="@+id/txt_item_product_price"
-            android:layout_marginTop="10dp"
+            android:layout_alignBottom="@+id/edt_item_product_quantity"
+            android:layout_marginLeft="15dp"
             android:layout_weight="1"
             android:text="+" />
 

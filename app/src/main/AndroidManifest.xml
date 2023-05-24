@@ -27,9 +27,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.OrderDetail"
-            android:exported="false" />
-        <activity
             android:name=".activity.PaymentOrderActivity"
             android:exported="false" />
         <activity

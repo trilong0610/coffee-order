@@ -4,14 +4,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EDF1EF"
+    android:padding="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.HomeFragment">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edt_product_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/btn_product_search"
+        android:hint="Tìm kiếm"
+        android:focusedByDefault="false"
+        android:visibility="invisible"
+        app:endIconMode="clear_text"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/btn_product_search"
+        android:src="@drawable/baseline_search_24"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@+id/edt_product_search"
+        android:layout_marginStart="10dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_product_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/edt_product_search"
         android:layout_above="@+id/txt_product_bill"/>
+
     <com.google.android.material.textview.MaterialTextView
         android:layout_below="@+id/rv_product_main"
         android:layout_above="@+id/slide_product_order"
@@ -21,7 +54,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
+        android:textStyle="bold"
         android:text="Tổng tiền:"/>
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/txt_product_bill"
         android:layout_above="@+id/slide_product_order"
@@ -30,7 +65,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
+        android:textStyle="bold"
         android:text="0"/>
+
     <com.ncorti.slidetoact.SlideToActView
         android:id="@+id/slide_product_order"
         android:layout_margin="10dp"

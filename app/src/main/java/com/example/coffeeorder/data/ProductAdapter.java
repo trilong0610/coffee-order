@@ -2,11 +2,12 @@ package com.example.coffeeorder.data;
 
 import android.content.Context;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,6 +53,23 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
         holder.txtItemProductPrice.setText(String.valueOf(productModel.priceProduct));
         Picasso.get().load(productModel.imgProduct).into(holder.imgItemProductImage);
 
+        InputFilter filter = new InputFilter() {
+            public CharSequence filter(CharSequence source, int start, int end,
+                                       Spanned dest, int dstart, int dend) {
+                try {
+                    int input = Integer.parseInt(dest.toString() + source.toString());
+                    if (input >= 0)
+                        return null;
+                } catch (NumberFormatException e) {
+                    // do nothing
+                }
+                if (holder.edtItemProductQuantity.getText().toString().isEmpty())
+                    return "0";
+                else
+                    return "";
+            }
+        };
+        holder.edtItemProductQuantity.setFilters(new InputFilter[]{filter});
         // event
 
         // tang so luong sp
@@ -79,7 +97,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
             int oldQuantity = 0;
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                oldQuantity = Integer.parseInt(holder.edtItemProductQuantity.getText().toString());
+
+                // Kiem tra neu nhap < 0 ko cho nhap
+
+                String text = holder.edtItemProductQuantity.getText().toString();
+                if (text.isEmpty() == false){
+                    oldQuantity = Integer.parseInt(holder.edtItemProductQuantity.getText().toString());
+                }
+
             }
 
             @Override
@@ -89,11 +114,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
 
             @Override
             public void afterTextChanged(Editable editable) {
+
+
+
                 String quantity = holder.edtItemProductQuantity.getText().toString();
                 if (quantity.isEmpty()){
                     return;
                 }
+
+
+
                 int numQuantity = Integer.parseInt(quantity);
+
                 if (numQuantity > oldQuantity){
                     // tang so luong
                     onItemCheckListener.onItemAdd(productModel, numQuantity - oldQuantity);
@@ -118,8 +150,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
         public TextView txtItemProductName;
         public TextView txtItemProductPrice;
         public TextView edtItemProductQuantity;
-        public Button btn_item_product_plus;
-        public Button btn_item_product_minus;
+        public ImageView btn_item_product_plus;
+        public ImageView btn_item_product_minus;
         public ProductItemViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -130,5 +162,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductI
             btn_item_product_plus = itemView.findViewById(R.id.btn_item_product_plus);
             btn_item_product_minus = itemView.findViewById(R.id.btn_item_product_minus);
         }
+    }
+
+    public void updateAdapter(ArrayList<ProductModel> productModels){
+        this.productModels = productModels;
+        notifyDataSetChanged();
     }
 }

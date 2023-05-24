@@ -3,6 +3,7 @@ package com.example.coffeeorder.activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -78,12 +79,14 @@ public class PaymentOrderActivity extends AppCompatActivity {
                 if (orderModel.statusOrder == 0){
                     // Hoan thanh pha che
                     completeBartending(idOrder);
+                    Toast.makeText(getBaseContext(),"Cập nhật đơn thành công",Toast.LENGTH_SHORT).show();
 
                 }
 
                 if (orderModel.statusOrder == 1){
                     // thanh toan don
                     completeBill(idOrder, idTable);
+                    Toast.makeText(getBaseContext(),"Cập nhật đơn thành công",Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -112,7 +115,7 @@ public class PaymentOrderActivity extends AppCompatActivity {
                     if (MainActivity.permission == 0 || MainActivity.permission == 2){
                         // Neu la account admin hoac pha che -> cho cap nhat pha che
                         slideComplete.setVisibility(View.VISIBLE);
-                        slideComplete.setText("Pha chế hoàn thành");
+                        slideComplete.setText("Đã pha chế");
                     }
                     else {
                         // Neu la account phuc vu -> khong cho cap nhat pha che

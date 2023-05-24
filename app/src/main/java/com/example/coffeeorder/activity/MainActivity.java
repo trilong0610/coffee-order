@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.coffeeorder.R;
 import com.example.coffeeorder.data.CoffeeOrderUtils;
-import com.example.coffeeorder.fragment.AdminFragment;
+import com.example.coffeeorder.fragment.AccountFragment;
 import com.example.coffeeorder.fragment.AnalysisFragment;
 import com.example.coffeeorder.fragment.HomeFragment;
 import com.example.coffeeorder.fragment.OrderFragment;
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     public static DatabaseReference mDatabase;
 
     public static int permission = -1;
+    public static String email = "";
     private View mainContainer;
     private ChipNavigationBar chipNavigationBar;
     private FragmentManager fragmentManager;
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                         addFragment(new AnalysisFragment(), true);
                         break;
                     case R.id.mnu_item_admin:
-                        addFragment(new AdminFragment(), true);
+                        addFragment(new AccountFragment(), true);
                         break;
 
                 }
@@ -163,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String uid = user.getUid();
+            email = user.getEmail();
             mDatabase.child("User").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DataSnapshot> task) {

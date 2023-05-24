@@ -20,7 +20,8 @@
         android:layout_margin="5sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
+        android:fontFamily="@font/bungee"
+        android:textSize="15sp"
         android:text="Tổng tiền:"/>
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/txt_order_bill"
@@ -30,6 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
+        android:textStyle="bold"
         android:text="0"/>
     <com.ncorti.slidetoact.SlideToActView
         android:id="@+id/slide_order_complete"

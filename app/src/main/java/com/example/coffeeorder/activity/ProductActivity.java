@@ -3,6 +3,8 @@ package com.example.coffeeorder.activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +17,7 @@ import com.example.coffeeorder.data.ProductAdapter;
 import com.example.coffeeorder.model.OrderDetailModel;
 import com.example.coffeeorder.model.OrderModel;
 import com.example.coffeeorder.model.ProductModel;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -31,7 +34,12 @@ public class ProductActivity extends AppCompatActivity {
     private MaterialTextView txt_bill;
     private SlideToActView slideToActView;
 
+    private ImageView btnSearch;
+
     private ArrayList<OrderDetailModel> listOrderDetail;
+
+    private TextInputLayout edtSearch;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,58 +51,14 @@ public class ProductActivity extends AppCompatActivity {
         id_table = getIntent().getExtras().getString("id_table");
     }
 
-    private void initEvent() {
-
-        slideToActView.setOnSlideCompleteListener(new SlideToActView.OnSlideCompleteListener() {
-            @Override
-            public void onSlideComplete(@NonNull SlideToActView slideToActView) {
-                // ------------------tao don-------------------------
-                // push de tao 1 note moi voi id ngau nhien
-                // getKey de lay id cua note vua tao
-                String key = MainActivity.mDatabase.child("Order").push().getKey();
-
-                long currentTime = System.currentTimeMillis()/1000;
-
-                long total = 0;
-                for (OrderDetailModel orderDetailModel: listOrderDetail) {
-                    total += orderDetailModel.product.priceProduct * orderDetailModel.quantity;
-                }
-
-                OrderModel orderModel = new OrderModel(key,0,total,"a","detail",id_table, listOrderDetail);
-                // toMap de tao ra model dung format de update len firebase
-//                Map<String, Object> postValues = orderModel.toMap();
-//
-//                Map<String, Object> childUpdates = new HashMap<>();
-
-                // update thong tin len note vua tao
-//                childUpdates.put("/Order/" +key, postValues);
-                MainActivity.mDatabase.child("Order").child(key).setValue(orderModel);
-
-
-//                MainActivity.mDatabase.updateChildren(childUpdates);
-
-                // ------------------chinh sua trang thai ban-------------------------
-                MainActivity.mDatabase.child("Table").child(id_table).child("status").setValue(false);
-                MainActivity.mDatabase.child("Table").child(id_table).child("idOrder").setValue(key);
-                // Gui data len note thong bao
-                String notifyKey = MainActivity.mDatabase.child("Notify").push().getKey();
-                MainActivity.mDatabase.child("Notify").child(notifyKey).setValue(orderModel);
-                // Xoa data
-                MainActivity.mDatabase.child("Notify").child(notifyKey).removeValue();
-
-
-                // Dong activity
-                finish();
-            }
-        });
-    }
-
     private void initView(){
         rv_product_main = findViewById(R.id.rv_product_main);
         listProduct = new ArrayList<ProductModel>();
         listOrderDetail = new ArrayList<OrderDetailModel>();
         slideToActView = findViewById(R.id.slide_product_order);
         txt_bill = findViewById(R.id.txt_product_bill);
+        edtSearch = findViewById(R.id.edt_product_search);
+        btnSearch = findViewById(R.id.btn_product_search);
 
         //        Set layout de hien thi thong tin trong recycle view
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
@@ -133,18 +97,17 @@ public class ProductActivity extends AppCompatActivity {
             public void onItemDelete(ProductModel item, int number) {
                 // Tim san pham trong list order
                 // Tim san pham trong list order
-                boolean flag = false;
                 for (OrderDetailModel orderDetailModel: listOrderDetail) {
                     if (orderDetailModel.product.idProduct == item.idProduct){
                         // Tim thay => thay doi sl
                         orderDetailModel.quantity -= number;
-                        flag = true;
+                        // Kiem tra neu sl = 0 => Xoa
+                        if (orderDetailModel.quantity <= 0){
+                            listOrderDetail.remove(orderDetailModel);
+                        }
+
                         break;
                     }
-                }
-                if (!flag){
-                    // Khong tim thay => them moi
-                    listOrderDetail.add(new OrderDetailModel(item, number));
                 }
                 txt_bill.setText(getBill(listOrderDetail));
 
@@ -154,7 +117,7 @@ public class ProductActivity extends AppCompatActivity {
 
         rv_product_main.setAdapter(adapter);
 
-        rv_product_main.scrollToPosition(listProduct.size() - 1);
+//        rv_product_main.scrollToPosition(listProduct.size() - 1);
 
         // Kiem tra quyen
         // Chi cho phuc vu hoac admin them
@@ -167,6 +130,97 @@ public class ProductActivity extends AppCompatActivity {
         }
 
     }
+    private void initEvent() {
+
+        slideToActView.setOnSlideCompleteListener(new SlideToActView.OnSlideCompleteListener() {
+            @Override
+            public void onSlideComplete(@NonNull SlideToActView slideToActView) {
+
+//                Kiem tra da them san pham vao gio hang chua
+                if (listOrderDetail.size() <= 0){
+                    Toast.makeText(getBaseContext(),"Vui lòng thêm sản phẩm",Toast.LENGTH_SHORT).show();
+                    slideToActView.resetSlider();
+                    return;
+                }
+                // ------------------tao don-------------------------
+                // push de tao 1 note moi voi id ngau nhien
+                // getKey de lay id cua note vua tao
+                String key = MainActivity.mDatabase.child("Order").push().getKey();
+
+                long currentTime = System.currentTimeMillis()/1000;
+
+                long total = 0;
+                for (OrderDetailModel orderDetailModel: listOrderDetail) {
+                    total += orderDetailModel.product.priceProduct * orderDetailModel.quantity;
+                }
+
+                OrderModel orderModel = new OrderModel(key,0,total,MainActivity.email,"detail",id_table, listOrderDetail);
+                // toMap de tao ra model dung format de update len firebase
+//                Map<String, Object> postValues = orderModel.toMap();
+//
+//                Map<String, Object> childUpdates = new HashMap<>();
+
+                // update thong tin len note vua tao
+//                childUpdates.put("/Order/" +key, postValues);
+                MainActivity.mDatabase.child("Order").child(key).setValue(orderModel);
+
+
+//                MainActivity.mDatabase.updateChildren(childUpdates);
+
+                // ------------------chinh sua trang thai ban-------------------------
+                MainActivity.mDatabase.child("Table").child(id_table).child("status").setValue(false);
+                MainActivity.mDatabase.child("Table").child(id_table).child("idOrder").setValue(key);
+                // Gui data len note thong bao
+                String notifyKey = MainActivity.mDatabase.child("Notify").push().getKey();
+                MainActivity.mDatabase.child("Notify").child(notifyKey).setValue(orderModel);
+                // Xoa data
+                MainActivity.mDatabase.child("Notify").child(notifyKey).removeValue();
+                Toast.makeText(getBaseContext(),"Tạo đơn thành công",Toast.LENGTH_SHORT).show();
+
+                // Dong activity
+                finish();
+            }
+        });
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (edtSearch.getVisibility() == View.INVISIBLE){
+                    // neu input an => Hien input
+                    edtSearch.setVisibility(View.VISIBLE);
+                }
+                else {
+                    // Tim kiem
+                    // Kiem tra input
+                    Log.d("Tag_searcg", edtSearch.getEditText().getText().toString());
+                    if (edtSearch.getEditText().getText().toString().equalsIgnoreCase("")){
+                        // ng dung xoa keyword
+                        // Tra ve full product
+                        adapter.updateAdapter(listProduct);
+                    }
+                    else {
+                        String key = edtSearch.getEditText().getText().toString();
+                        Log.d("Tag_searcg", key);
+                        ArrayList<ProductModel> listTemp = new ArrayList<>();
+
+                        // lay danh sach nhung sp co ten = key
+                        listProduct.forEach((item) -> {
+                            if (item.nameProduct.toLowerCase().contains(key.toLowerCase())) {
+                                listTemp.add(item);
+                            }
+                        });
+
+                        adapter.updateAdapter(listTemp);
+                    }
+                    // An search
+                    edtSearch.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+
+    }
+
     private void loadData(){
         MainActivity.mDatabase.child("Product").addChildEventListener(new ChildEventListener() {
             @Override

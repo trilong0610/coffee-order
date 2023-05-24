@@ -43,7 +43,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableItemVie
         holder.txtItemTableId.setText(tableModel.idTable);
         holder.txtItemTableQuantity.setText(String.valueOf(tableModels.get(position).quantity));
         holder.txtItemTableStatus.setText(String.valueOf(tableModels.get(position).status));
-        holder.txtItemTableIdOrder.setText(tableModels.get(position).idOrder);
         // Gan mau cho item
         if (tableModel.status == true) { // san sang
             holder.layout.setBackground(new ColorDrawable(ContextCompat.getColor(context, R.color.green)));
@@ -84,7 +83,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableItemVie
         public TextView txtItemTableId;
         public TextView txtItemTableQuantity;
         public TextView txtItemTableStatus;
-        public TextView txtItemTableIdOrder;
 
         public LinearLayout layout;
         public TableItemViewHolder(@NonNull View itemView) {
@@ -93,7 +91,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableItemVie
             txtItemTableId = itemView.findViewById(R.id.txt_item_table_id);
             txtItemTableQuantity = itemView.findViewById(R.id.txt_item_table_quantity);
             txtItemTableStatus = itemView.findViewById(R.id.txt_item_table_status);
-            txtItemTableIdOrder = itemView.findViewById(R.id.txt_item_table_idOrder);
             layout = itemView.findViewById(R.id.layout_item_table);
         }
     }

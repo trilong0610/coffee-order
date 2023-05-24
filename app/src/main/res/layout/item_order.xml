@@ -42,8 +42,8 @@
                     android:id="@+id/textView8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/bungee"
                     android:text="Chi tiết:" />
+                    android:fontFamily="@font/bungee"
                 <TextView
                     android:id="@+id/detail_order"
                     android:layout_marginStart="10dp"

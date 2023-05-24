@@ -10,29 +10,33 @@
     <LinearLayout
         android:id="@+id/layout_item_table"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardview1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            app:cardElevation="8dp"
+            android:layout_margin="3dp"
+            app:cardElevation="0dp"
             app:cardCornerRadius="15dp">
 
             <ImageView
                 android:id="@+id/img_item_order_image"
-                android:layout_width="200sp"
+                android:layout_width="match_parent"
                 android:layout_height="155dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ban" />
+                android:src="@drawable/table" />
         </androidx.cardview.widget.CardView>
+
         <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal">
         <TextView
             android:id="@+id/txt_maban"
             android:layout_width="wrap_content"
@@ -48,34 +52,18 @@
             android:textColor="@color/black"
             android:fontFamily="@font/bungee"/>
       </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/txt_sl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/bungee"
-                android:textColor="@color/black"
-                android:text="SL :" />
-            <TextView
-                android:id="@+id/txt_item_table_quantity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:textColor="@color/black"
-                android:fontFamily="@font/bungee" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/txt_trangthai"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="10sp"
                 android:fontFamily="@font/bungee"
                 android:textColor="@color/black"
                 android:text="Trạng Thái: " />
@@ -84,6 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:textSize="10sp"
                 android:textColor="@color/black"
                 android:fontFamily="@font/bungee"/>
         </LinearLayout>

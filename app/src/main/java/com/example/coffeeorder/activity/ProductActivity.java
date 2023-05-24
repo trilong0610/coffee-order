@@ -117,7 +117,6 @@ public class ProductActivity extends AppCompatActivity {
 
         rv_product_main.setAdapter(adapter);
 
-//        rv_product_main.scrollToPosition(listProduct.size() - 1);
 
         // Kiem tra quyen
         // Chi cho phuc vu hoac admin them
@@ -231,8 +230,6 @@ public class ProductActivity extends AppCompatActivity {
 
                 adapter.notifyDataSetChanged();
 
-//                ---------------Cuộn đến item trên cùng khi thêm---------------------------
-                rv_product_main.scrollToPosition(listProduct.size() - 1);
             }
 
             @Override

@@ -2,6 +2,7 @@ package com.example.coffeeorder.data;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.icu.text.SimpleDateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.example.coffeeorder.activity.PaymentOrderActivity;
 import com.example.coffeeorder.model.OrderModel;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
 
@@ -21,6 +23,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     private ArrayList<OrderModel> filteredList;
     public class OrderViewHolder extends RecyclerView.ViewHolder {
         public TextView id_order, time_order, time_complete, status_order,total_order,id_user,id_table,detail_order;
+
+        public TextView txtTimeOrder;
         public View layoutMain;
         public OrderViewHolder(View view) {
             super(view);
@@ -32,6 +36,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             id_table = (TextView) view.findViewById(R.id.id_table);
             detail_order = (TextView) view.findViewById(R.id.detail_order);
             layoutMain = view.findViewById(R.id.layout_item_order_main);
+            txtTimeOrder = view.findViewById(R.id.txt_item_order_time_order);
 
         }
     }
@@ -59,6 +64,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         holder.id_user.setText(data.getIdUser());
         holder.id_table.setText(data.getIdTable());
         holder.detail_order.setText(data.getDetailOrder());
+        holder.txtTimeOrder.setText(unixToDate(data.getTimeOrder()));
 
         // gan trang thai va mau cho don
         if(data.statusOrder == 0) {
@@ -97,6 +103,14 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     @Override
     public int getItemCount() {
         return dataList.size();
+    }
+
+    private String unixToDate(long unix){
+        Date date = new Date(unix * 1000);
+
+// Format the date as a string
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss dd-MM-yyyy");
+        return sdf.format(date);
     }
 }
 

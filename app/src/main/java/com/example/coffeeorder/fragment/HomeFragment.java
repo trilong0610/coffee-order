@@ -58,7 +58,6 @@ public class HomeFragment extends Fragment {
 
         recycleViewTableMain.setAdapter(adapter);
 
-        recycleViewTableMain.scrollToPosition(listTable.size() - 1);
     }
 
     private void initEvent(View view){
@@ -75,8 +74,6 @@ public class HomeFragment extends Fragment {
 
                 adapter.notifyDataSetChanged();
 
-//                ---------------Cuộn đến item trên cùng khi thêm---------------------------
-                recycleViewTableMain.scrollToPosition(listTable.size() - 1);
             }
 
             @Override

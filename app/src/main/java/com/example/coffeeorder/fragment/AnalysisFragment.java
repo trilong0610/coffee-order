@@ -161,9 +161,10 @@ public class AnalysisFragment extends Fragment implements View.OnClickListener {
 
                 // Lay danh sach don hang
                 listOrders.add(orderModel);
+                orderModel.orderDetails.forEach((item) -> listOrderDetails.add(item));
                 // Lay danh sach chi tiet don hang trong don
 //                orderModel.orderDetails.forEach((item) -> listOrderDetails.add(item));
-                Log.d("TAG_ANALYSIS", String.valueOf(listOrders.size()));
+                Log.d("TAG_ANALYSIS", String.valueOf(listOrderDetails.size()));
 //                Log.d("TAG_ANALYSIS", String.valueOf(orderModel.getOrderDetails()));
                 updateTotalBill();
                 updateTotalProduct();
@@ -196,11 +197,11 @@ public class AnalysisFragment extends Fragment implements View.OnClickListener {
         for (OrderDetailModel orderDetailModel: listOrderDetails) {
                 total += orderDetailModel.quantity;
         }
-        txtTotalProduct.setText(String.valueOf(total));
+        txtTotalProduct.setText(String.valueOf(total) + " sản phẩm");
     }
     private void updateTotalOrder(){
         int total = listOrders.size();
-        txtTotalOrder.setText(String.valueOf(total));
+        txtTotalOrder.setText(String.valueOf(total) + " đơn hàng");
     }
     private void updateTotalBill(){
         int total = 0;

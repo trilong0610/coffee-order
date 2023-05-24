@@ -1,7 +1,6 @@
 package com.example.coffeeorder.data;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.coffeeorder.R;
@@ -22,9 +20,16 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapte
     public Context c;
     public ArrayList<OrderDetailModel> orderDetailModels;
 
-    public OrderDetailsAdapter(Context c, ArrayList<OrderDetailModel> orderDetailModels){
+    public int orderStatus;
+
+    public String idOrder;
+
+
+
+    public OrderDetailsAdapter(Context c, ArrayList<OrderDetailModel> orderDetailModels, int orderStatus){
         this.c = c;
         this.orderDetailModels = orderDetailModels;
+        this.orderStatus = orderStatus;
     }
 
     @NonNull
@@ -42,24 +47,50 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapte
         holder.txtItemOrderPrice.setText(String.valueOf(orderDetailModel.product.priceProduct));
         holder.txtItemOrderQuantity.setText(String.valueOf(orderDetailModel.quantity));
         Picasso.get().load(orderDetailModel.product.imgProduct).into(holder.imgItemOrderImage);
+        holder.btnDelete.setVisibility(View.INVISIBLE);
+//        if (orderStatus == 0){
+//            holder.btnDelete.setVisibility(View.VISIBLE);
+//        }
+//        else {
+//            holder.btnDelete.setVisibility(View.INVISIBLE);
+//        }
 
-        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-// Hien thi thong bao
-                new AlertDialog.Builder(c)
-                        .setMessage("Bạn muốn xóa sản phẩm " + orderDetailModel.product.nameProduct + " ?")
-                        .setCancelable(true)
-                        .setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        })
-                        .setNegativeButton("Hủy", null)
-                        .show();
-            }
-        });
+//        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//// Hien thi thong bao
+//                new AlertDialog.Builder(c)
+//                        .setMessage("Bạn muốn xóa sản phẩm " + orderDetailModel.product.nameProduct + " ?")
+//                        .setCancelable(true)
+//                        .setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//                                // Doc dánh sasch san pham trong detail order
+//                                MainActivity.mDatabase.child("Order")
+//                                        .child(idOrder)
+//                                        .child("orderDetails")
+//                                        .orderByChild("product/idProduct")
+//                                        .equalTo(orderDetailModel.product.idProduct)
+//                                        .get()
+//                                        .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//                                            @Override
+//                                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+//                                                for (DataSnapshot dataSnapshot: task.getResult().getChildren()) {
+//                                                    OrderDetailModel model = dataSnapshot.getValue(OrderDetailModel.class);
+//                                                    Log.d("DELETE_PRODUCT", dataSnapshot.getValue(OrderDetailModel.class).product.nameProduct);
+//                                                    Log.d("DELETE_PRODUCT", dataSnapshot.getRef().toString());
+//                                                    dataSnapshot.getRef().removeValue();
+//                                                }
+//
+//                                            }
+//                                        });
+//                            }
+//                        })
+//                        .setNegativeButton("Hủy", null)
+//                        .show();
+//            }
+//        });
     }
 
     @Override
@@ -82,5 +113,19 @@ public class OrderDetailsAdapter extends RecyclerView.Adapter<OrderDetailsAdapte
             txtItemOrderQuantity = itemView.findViewById(R.id.txt_item_order_quantity);
             btnDelete = itemView.findViewById(R.id.btn_item_order_delete);
         }
+    }
+
+    public void setOrderStatus(int status){
+        this.orderStatus = status;
+        notifyDataSetChanged();
+    }
+    public void setOrderId(String id){
+        this.idOrder = id;
+        notifyDataSetChanged();
+    }
+
+    public void updateAdapter(ArrayList<OrderDetailModel> orderDetailModels){
+        this.orderDetailModels = orderDetailModels;
+        notifyDataSetChanged();
     }
 }

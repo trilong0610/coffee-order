@@ -41,15 +41,19 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableItemVie
     public void onBindViewHolder(@NonNull TableAdapter.TableItemViewHolder holder, int position) {
         TableModel tableModel = tableModels.get(position);
         holder.txtItemTableId.setText(tableModel.idTable);
-        holder.txtItemTableQuantity.setText(String.valueOf(tableModels.get(position).quantity));
-        holder.txtItemTableStatus.setText(String.valueOf(tableModels.get(position).status));
+
+        String status = "Sẵn sàng";
         // Gan mau cho item
         if (tableModel.status == true) { // san sang
             holder.layout.setBackground(new ColorDrawable(ContextCompat.getColor(context, R.color.green)));
+            status = "Sẵn sàng";
         }
         else {
             holder.layout.setBackground(new ColorDrawable(ContextCompat.getColor(context, R.color.red)));
+            status = "Có khách";
         }
+
+        holder.txtItemTableStatus.setText(status);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +85,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableItemVie
 
     public class TableItemViewHolder extends RecyclerView.ViewHolder {
         public TextView txtItemTableId;
-        public TextView txtItemTableQuantity;
         public TextView txtItemTableStatus;
 
         public LinearLayout layout;
@@ -89,7 +92,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableItemVie
             super(itemView);
 
             txtItemTableId = itemView.findViewById(R.id.txt_item_table_id);
-            txtItemTableQuantity = itemView.findViewById(R.id.txt_item_table_quantity);
             txtItemTableStatus = itemView.findViewById(R.id.txt_item_table_status);
             layout = itemView.findViewById(R.id.layout_item_table);
         }

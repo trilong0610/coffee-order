@@ -94,12 +94,5 @@
 
     </LinearLayout>
     <!-- Adding bottom sheet after main content -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatbtn_order_open_filter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="16dp"
-        android:contentDescription="Lọc"
-        android:src="@drawable/baseline_filter_alt_24"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

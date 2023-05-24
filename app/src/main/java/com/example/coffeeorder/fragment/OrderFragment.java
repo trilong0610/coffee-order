@@ -23,16 +23,11 @@ import com.example.coffeeorder.activity.MainActivity;
 import com.example.coffeeorder.data.OrderAdapter;
 import com.example.coffeeorder.model.OrderDetailModel;
 import com.example.coffeeorder.model.OrderModel;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -48,19 +43,18 @@ public class OrderFragment extends Fragment {
     private RecyclerView recyclerView;
     private OrderAdapter mAdapter;
 
-    private FloatingActionButton btnOpenFilter;
-    private BottomSheetDialog bottomSheetDialog;
 
     TextInputEditText edtFromDate;
     TextInputEditText edtToDate;
 
     TextInputLayout layoutMenuFilter;
 
-    MaterialDatePicker datePicker;
     Calendar calendarFromTime = Calendar.getInstance();
     Calendar calendarToTime = Calendar.getInstance();
 
     AutoCompleteTextView menuType;
+
+    int currentPosition = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,69 +64,21 @@ public class OrderFragment extends Fragment {
         initView(view);
         initEvent(view);
 
+
+
         return view;
     }
 
-
-    private void filter(String keyword) {
-        filteredList.clear();
-
-        for (OrderModel item : dataList) {
-            if (item.getIdUser().toLowerCase().contains(keyword.toLowerCase())||item.getIdTable().toLowerCase().contains(keyword.toLowerCase())) {
-                filteredList.add(item);
-            }
-        }
-
-        mAdapter.filterList(filteredList);
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadData(currentPosition);
     }
-    private void filterStatus(String selectedOption) {
-        filteredList.clear();
 
-        // Lọc dữ liệu dựa trên tùy chọn được chọn
-        if (selectedOption.equals("Tất cả")) {
-            // Lọc dữ liệu cho Option 1
-            for (OrderModel item : dataList) {
-
-                // Kiểm tra và thêm item vào danh sách lọc
-                if (item.getStatusOrder() == 0 || item.getStatusOrder() == 1 || item.getStatusOrder() == 2) {
-                    filteredList.add(item);
-                }
-            }
-        }
-        if (selectedOption.equals("Chưa hoàn thành (0)")) {
-            // Lọc dữ liệu cho Option 1
-            for (OrderModel item : dataList) {
-
-                // Kiểm tra và thêm item vào danh sách lọc
-                if (item.getStatusOrder() == 0) {
-                    filteredList.add(item);
-                }
-            }
-        } else if (selectedOption.equals("Đã hoàn thành (1)")) {
-            // Lọc dữ liệu cho Option 2
-            for (OrderModel item : dataList) {
-                // Kiểm tra và thêm item vào danh sách lọc
-                if (item.getStatusOrder() == 1) {
-                    filteredList.add(item);
-                }
-            }
-        } else if (selectedOption.equals("Đã thanh toán (2)")) {
-            // Lọc dữ liệu cho Option 3
-            for (OrderModel item : dataList) {
-                // Kiểm tra và thêm item vào danh sách lọc
-                if (item.getStatusOrder() == 2) {
-                    filteredList.add(item);
-                }
-            }
-        }
-
-        mAdapter.filterList(filteredList);
-    }
     private void initView(View view) {
         dataList = new ArrayList<OrderModel>();
         filteredList = new ArrayList<>(dataList);
         recyclerView = view.findViewById(R.id.recyclerView);
-        btnOpenFilter = view.findViewById(R.id.floatbtn_order_open_filter);
 
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         mAdapter = new OrderAdapter(dataList);
@@ -163,70 +109,48 @@ public class OrderFragment extends Fragment {
         menuType = (AutoCompleteTextView) layoutMenuFilter.getEditText();
         menuType.setAdapter(arrayAdapter);
         menuType.setText("Chưa pha chế", false);
-
-        loadData(0);
     }
+
     private void initEvent(View view) {
         menuType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("TAG", String.valueOf(position));
-                loadData(position);
+                currentPosition = position;
+                loadData(currentPosition);
             }
         });
+
     }
     // load danh sach order tu db
     private void loadData(int status){
         dataList.clear();
         mAdapter.notifyDataSetChanged();
-        MainActivity.mDatabase.child("Order").orderByChild("statusOrder").equalTo(status).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                OrderModel orderModel = snapshot.getValue(OrderModel.class);
-                Log.d("TAG", String.valueOf(orderModel.idOrder));
-                dataList.add(orderModel);
-                // cap nhat adapter
-                mAdapter.notifyDataSetChanged();
+        MainActivity.mDatabase.child("Order")
+                .orderByChild("statusOrder")
+                .equalTo(status)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        for (DataSnapshot snapshot: task.getResult().getChildren()) {
+                            OrderModel orderModel = snapshot.getValue(OrderModel.class);
+                            Log.d("TAG", String.valueOf(orderModel.idOrder));
+                            dataList.add(orderModel);
+                            // cap nhat adapter
+                            mAdapter.notifyDataSetChanged();
 //                ---------------Cuộn đến item trên cùng khi thêm---------------------------
-                recyclerView.scrollToPosition(dataList.size() - 1);
-            }
+                            recyclerView.scrollToPosition(dataList.size() - 1);
+                        }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                // Lay thong tin don hang thay doi
-                OrderModel orderModel = snapshot.getValue(OrderModel.class);
-                // Tim don hang trong list
-                for (OrderModel item : dataList) {
-                    if (item.idOrder == orderModel.idOrder){
-                        item.statusOrder = orderModel.statusOrder;
-                        mAdapter.notifyDataSetChanged();
-                        recyclerView.scrollToPosition(dataList.size() - 1);
-                        return;
                     }
-                }
-            }
+                });
 
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-
-
-        });
     }
     private void updateTimeToEditText(EditText editText, Calendar calendar){
         String format = "dd/MM/yyyy";
         SimpleDateFormat dateFormat=new SimpleDateFormat(format, Locale.US);
         editText.setText(dateFormat.format(calendar.getTime()));
     }
+
 }

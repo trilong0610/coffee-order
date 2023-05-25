@@ -100,11 +100,7 @@ public class ProductActivity extends AppCompatActivity {
             public void onSlideComplete(@NonNull SlideToActView slideToActView) {
 
 //                Kiem tra da them san pham vao gio hang chua
-                if (dataList.size() <= 0){
-                    Toast.makeText(getBaseContext(),"Vui lòng thêm sản phẩm",Toast.LENGTH_SHORT).show();
-                    slideToActView.resetSlider();
-                    return;
-                }
+
                 // ------------------tao don-------------------------
                 // push de tao 1 note moi voi id ngau nhien
                 // getKey de lay id cua note vua tao
@@ -121,6 +117,12 @@ public class ProductActivity extends AppCompatActivity {
                 });
                 for (OrderDetailModel orderDetailModel: temp) {
                     total += orderDetailModel.product.priceProduct * orderDetailModel.quantity;
+                }
+
+                if (temp.size() <= 0){
+                    Toast.makeText(getBaseContext(),"Vui lòng thêm sản phẩm",Toast.LENGTH_SHORT).show();
+                    slideToActView.resetSlider();
+                    return;
                 }
 
                 OrderModel orderModel = new OrderModel(key,0,total,MainActivity.email,"detail",id_table, temp);

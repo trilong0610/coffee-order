@@ -100,7 +100,7 @@ public class ProductActivity extends AppCompatActivity {
             public void onSlideComplete(@NonNull SlideToActView slideToActView) {
 
 //                Kiem tra da them san pham vao gio hang chua
-                if (listOrderDetail.size() <= 0){
+                if (dataList.size() <= 0){
                     Toast.makeText(getBaseContext(),"Vui lòng thêm sản phẩm",Toast.LENGTH_SHORT).show();
                     slideToActView.resetSlider();
                     return;
@@ -113,11 +113,17 @@ public class ProductActivity extends AppCompatActivity {
                 long currentTime = System.currentTimeMillis()/1000;
 
                 long total = 0;
-                for (OrderDetailModel orderDetailModel: listOrderDetail) {
+                ArrayList<OrderDetailModel> temp = new ArrayList<>();
+                dataList.forEach((item) -> {
+                    if (item.quantity > 0) {
+                        temp.add(item);
+                    }
+                });
+                for (OrderDetailModel orderDetailModel: temp) {
                     total += orderDetailModel.product.priceProduct * orderDetailModel.quantity;
                 }
 
-                OrderModel orderModel = new OrderModel(key,0,total,MainActivity.email,"detail",id_table, listOrderDetail);
+                OrderModel orderModel = new OrderModel(key,0,total,MainActivity.email,"detail",id_table, temp);
                 // toMap de tao ra model dung format de update len firebase
 //                Map<String, Object> postValues = orderModel.toMap();
 //
